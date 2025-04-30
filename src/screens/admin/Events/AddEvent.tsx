@@ -20,11 +20,11 @@ import { useGreenSpaces } from "@/hooks/useGreenSpaces";
 type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "AddEvent">;
 
 const EVENT_CATEGORIES = [
-  "ENVIRONMENTAL_VOLUNTEER_ACTIVITY",
-  "EDUCATIONAL_WORKSHOP",
-  "COMMUNITY_GATHERING",
-  "NATURE_WALK",
-  "GARDENING_WORKSHOP",
+  "Environmental Volunteer Activity",
+  "Educational Workshop",
+  "Community Gathering",
+  "Nature Walk",
+  "Gardening Workshop",
 ];
 
 const AddEventScreen = () => {
@@ -105,7 +105,7 @@ const AddEventScreen = () => {
             </View>
 
             <View style={styles.inputsContainer}>
-              <TextComp text="EVENT_CATEGORY" style={styles.inputLabel} />
+              <TextComp text="Event Category" style={styles.inputLabel} />
               <View style={[styles.inputContainer, styles.pickerContainer]}>
                 <Picker
                   selectedValue={formData.category}

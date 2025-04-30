@@ -21,11 +21,11 @@ type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "UpdateEven
 type RouteProp = RouteProp<AdminStackParamList, "UpdateEvent">;
 
 const EVENT_CATEGORIES = [
-  "ENVIRONMENTAL_VOLUNTEER_ACTIVITY",
-  "EDUCATIONAL_WORKSHOP",
-  "COMMUNITY_GATHERING",
-  "NATURE_WALK",
-  "GARDENING_WORKSHOP",
+  "Environmental Volunteer Activity",
+  "Educational Workshop",
+  "Community Gathering",
+  "Nature Walk",
+  "Gardening Workshop",
 ];
 
 const UpdateEventScreen = () => {

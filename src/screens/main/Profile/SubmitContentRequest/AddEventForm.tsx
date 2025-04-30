@@ -23,11 +23,11 @@ import { Ionicons } from "@expo/vector-icons";
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, "AddEventForm">;
 
 const EVENT_CATEGORIES = [
-  "ENVIRONMENTAL_VOLUNTEER_ACTIVITY",
-  "EDUCATIONAL_WORKSHOP",
-  "COMMUNITY_GATHERING",
-  "NATURE_WALK",
-  "GARDENING_WORKSHOP",
+  "Environmental Volunteer Activity",
+  "Educational Workshop",
+  "Community Gathering",
+  "Nature Walk",
+  "Gardening Workshop",
 ];
 
 const AddEventForm = () => {
