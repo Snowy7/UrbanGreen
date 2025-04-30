@@ -121,13 +121,12 @@ const EditAccount = () => {
         </View>
 
         <View style={styles.whiteBoard}>
-          <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
+          <View style={styles.imageContainer}>
             <Image
               source={{ uri: formData.imageUrl || "https://via.placeholder.com/150" }}
               style={styles.profileImage}
             />
-            <TextComp text="Change Profile Picture" style={styles.changeImageText} />
-          </TouchableOpacity>
+          </View>
 
           <View style={styles.horizontalInputs}>
             <View style={styles.horizontalInputsContainer}>
@@ -245,7 +244,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: "center",
-    marginBottom: verticalScale(20),
+    marginBottom: verticalScale(10),
   },
   profileImage: {
     width: moderateScale(100),
