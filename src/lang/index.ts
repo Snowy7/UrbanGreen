@@ -18,13 +18,13 @@ i18n
   .init({
     debug: __DEV__, // Enable debug mode for development
     fallbackLng: "en", // Fallback language if translation for detected language is unavailable
-    supportedLngs: ["en", "ar"], // Supported languages in the application
+    supportedLngs: ["en"], // Supported languages in the application
     resources: {
       en: {
         translation: enTranslation, // English translations loaded from en.json
       },
-      ar: {
+/*       ar: {
         translation: arTranslation, // Arabic translations loaded from ar.json
-      },
+      }, */
     },
   });
