@@ -35,7 +35,7 @@ const settingSlice = createSlice({
   reducers: {
     saveDefaultLanguage: (state, action: PayloadAction<LanguageInterface>) => {
       const languageExists = state.languages.some(
-        (lang) => lang.sortName === action.payload.sortName,
+        (lang) => lang.sortName === action.payload.sortName
       );
       if (languageExists) {
         state.defaultLanguage = action.payload;

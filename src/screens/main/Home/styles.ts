@@ -1,160 +1,279 @@
-import { Colors, commonColors, ThemeType } from '@/styles/colors';
-import fontFamily from '@/styles/fontFamily';
-import { moderateScale } from '@/styles/scaling';
-import { StyleSheet, Dimensions } from 'react-native';
-import { useMemo } from 'react';
+import { Colors, commonColors, ThemeType } from "@/styles/colors";
+import fontFamily from "@/styles/fontFamily";
+import { moderateScale, verticalScale } from "@/styles/scaling";
+import { StyleSheet, Dimensions } from "react-native";
+import { useMemo } from "react";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 const CARD_MARGIN = moderateScale(4);
 const CARD_WIDTH = (width - moderateScale(20) - CARD_MARGIN * 2) / 2;
 
 const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
-    const colors = Colors[theme ?? 'light'];
+  const colors = Colors[theme ?? "light"];
 
-    return useMemo(() => StyleSheet.create({
+  return useMemo(
+    () =>
+      StyleSheet.create({
         container: {
-            flex: 1,
-            backgroundColor: colors.background,
+          flex: 1,
+          backgroundColor: colors.background,
+          paddingBottom: verticalScale(100),
         },
         loadingContainer: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: colors.background,
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: colors.background,
         },
-        header: {
-            paddingHorizontal: moderateScale(16),
-            paddingVertical: moderateScale(12),
-            borderBottomWidth: 1,
-            borderBottomColor: colors.inputBorder,
-            backgroundColor: colors.surface,
-            shadowColor: '#000',
-            shadowOffset: {
-                width: 0,
-                height: 2,
-            },
-            shadowOpacity: 0.1,
-            shadowRadius: 3,
-            elevation: 3,
-            zIndex: 1,
+        heroSection: {
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: colors.background,
+          width: "100%",
+          height: verticalScale(250),
         },
-        headerTitle: {
-            fontSize: moderateScale(24),
-            fontFamily: fontFamily.bold,
-            color: colors.text,
-            textAlign: isRTL ? 'right' : 'left',
+        heroImage: {
+          width: "100%",
+          height: "100%",
         },
-        listContainer: {
-            gap: 10,
-            paddingHorizontal: 10,
-
+        heroGradient: {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
         },
-        columnWrapper: {
-            justifyContent: 'space-between',
+        heroTextContainer: {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: "flex-end",
+          alignItems: "flex-start",
+          padding: moderateScale(20),
+          marginBottom: verticalScale(30),
         },
-        footerLoader: {
-            width: '100%',
-            height: moderateScale(50),
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'absolute',
-            bottom: moderateScale(20),
+        heroText: {
+          fontSize: moderateScale(30),
+          fontWeight: "bold",
+          color: "#fff",
+        },
+        heroSubText: {
+          fontSize: moderateScale(16),
+          fontWeight: "200",
+          color: "#fff",
+        },
+        content: {
+          flex: 1,
+          backgroundColor: colors.background,
+          width: "100%",
+          height: "100%",
+        },
+        whiteBoard: {
+          flex: 1,
+          backgroundColor: colors.background,
+          width: "100%",
+          height: "100%",
+          borderTopLeftRadius: moderateScale(25),
+          borderTopRightRadius: moderateScale(25),
+          padding: moderateScale(20),
+          marginTop: verticalScale(-25),
+        },
+        sectionTitle: {
+          fontSize: moderateScale(16),
+          fontWeight: "medium",
+          color: commonColors.secondary,
+          textAlign: "left",
+        },
+        sectionTitleContainer: {
+          marginVertical: verticalScale(10),
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        },
+        seeAllButton: {
+          alignSelf: "flex-end",
+        },
+        seeAllText: {
+          fontSize: moderateScale(16),
+          fontWeight: "medium",
+          color: commonColors.gray300,
+          textDecorationLine: "underline",
+        },
+        twoCardsSection: {
+          flexDirection: "row",
+          justifyContent: "space-between",
+          gap: moderateScale(10),
+          marginVertical: verticalScale(10),
         },
         card: {
-            width: CARD_WIDTH,
-            backgroundColor: colors.surface,
-            borderRadius: moderateScale(8),
-            shadowColor: '#000',
-            shadowOffset: {
-                width: 0,
-                height: 1,
-            },
-            shadowOpacity: 0.2,
-            shadowRadius: 2,
-            elevation: 2,
+          flex: 1,
+          backgroundColor: colors.surface,
+          borderRadius: moderateScale(10),
+          padding: moderateScale(20),
+          alignItems: "center",
+          justifyContent: "center",
+          gap: moderateScale(10),
+          shadowColor: commonColors.black,
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
         },
-        cardPressable: {
-            flex: 1,
-            width: '100%',
+        cardTitle: {
+          fontSize: moderateScale(14),
+          fontWeight: "thin",
         },
-        characterImage: {
-            width: '100%',
-            height: CARD_WIDTH * 1.2,
-            resizeMode: 'cover',
-            borderTopLeftRadius: moderateScale(8),
-            borderTopRightRadius: moderateScale(8),
+        cardImage: {},
+        horizontalContainer: {
+          flex: 1,
+          backgroundColor: colors.background,
+          width: "100%",
+          height: "100%",
+          paddingVertical: verticalScale(10),
+          paddingHorizontal: moderateScale(10),
         },
-        cardContent: {
-            padding: moderateScale(12),
+        recommendedGreenSpaceCard: {
+          width: moderateScale(250),
+          height: moderateScale(150),
+          backgroundColor: colors.surface,
+          borderRadius: moderateScale(10),
         },
-        cardHeader: {
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: moderateScale(8),
+        cardOverlay: {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          borderRadius: moderateScale(10),
+          justifyContent: "flex-end",
+          alignItems: "flex-start",
+          padding: moderateScale(10),
         },
-        characterName: {
-            fontSize: moderateScale(16),
-            fontFamily: fontFamily.bold,
-            color: colors.text,
-            flex: 1,
-            textAlign: isRTL ? 'right' : 'left',
+        recommendedGreenSpaceImage: {
+          width: "100%",
+          height: "100%",
+          borderRadius: moderateScale(10),
         },
-        statusIndicator: {
-            width: moderateScale(8),
-            height: moderateScale(8),
-            borderRadius: moderateScale(4),
-            marginHorizontal: moderateScale(6),
-            borderWidth: 1,
-            borderColor: 'rgba(255,255,255,0.3)',
+        recommendedGreenSpaceTitle: {
+          fontSize: moderateScale(14),
+          fontWeight: "medium",
+          color: "#fff",
         },
-        infoRow: {
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            marginBottom: moderateScale(4),
+        locationContainer: {
+          flexDirection: "row",
+          alignItems: "center",
+          gap: moderateScale(5),
         },
-        label: {
-            fontSize: moderateScale(12),
-            fontFamily: fontFamily.medium,
-            color: colors.textSecondary,
-            marginEnd: moderateScale(4),
+        locationText: {
+          fontSize: moderateScale(10),
+          fontWeight: "medium",
+          color: "#fff",
         },
-        value: {
-            fontSize: moderateScale(12),
-            fontFamily: fontFamily.regular,
-            color: colors.text,
-            flex: 1,
-            textAlign: isRTL ? 'right' : 'left',
+
+        eventCardContainer: {
+          width: moderateScale(250),
+          backgroundColor: colors.surface,
+          borderRadius: moderateScale(10),
+          shadowColor: commonColors.black,
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
         },
-        statusBadge: {
-            paddingHorizontal: moderateScale(8),
-            paddingVertical: moderateScale(2),
-            borderRadius: moderateScale(12),
-            backgroundColor: colors.surface,
-            position: 'absolute',
-            top: moderateScale(8),
-            right: moderateScale(8),
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            shadowColor: '#000',
-            shadowOffset: {
-                width: 0,
-                height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 2,
-            elevation: 3,
+
+        eventCard: {
+          width: "100%",
+          height: "100%",
+          padding: moderateScale(10),
         },
-        statusText: {
-            fontSize: moderateScale(10),
-            fontFamily: fontFamily.medium,
-            color: colors.text,
-            marginStart: moderateScale(4),
+
+        eventCardContent: {
+          flex: 1,
+          paddingVertical: verticalScale(10),
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
         },
-        listHeader:{
-            height: moderateScale(10)
-        }
-    }), [isRTL, theme, colors]);
+
+        eventCardTitleContainer: {
+          flexDirection: "row",
+          alignItems: "center",
+          gap: moderateScale(5),
+          marginTop: verticalScale(10),
+        },
+
+        eventCardTitle: {
+          fontSize: moderateScale(12),
+          fontWeight: "medium",
+          color: commonColors.primary,
+        },
+
+        dot: {
+          width: moderateScale(5),
+          height: moderateScale(5),
+          backgroundColor: commonColors.primary,
+          borderRadius: moderateScale(5),
+        },
+
+        eventCardDescription: {
+          fontSize: moderateScale(12),
+          fontWeight: "medium",
+          color: commonColors.gray300,
+        },
+
+        eventCardDateContainer: {
+          flexDirection: "row",
+          alignItems: "center",
+          gap: moderateScale(5),
+          marginTop: verticalScale(10),
+        },
+
+        eventCardDate: {
+          fontSize: moderateScale(12),
+          fontWeight: "medium",
+          color: commonColors.gray300,
+        },
+
+        eventCardBottomSection: {
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: moderateScale(10),
+          backgroundColor: commonColors.primary,
+          borderBottomLeftRadius: moderateScale(10),
+          borderBottomRightRadius: moderateScale(10),
+        },
+
+        bottomSection: {
+          height: verticalScale(50),
+          width: "100%",
+        },
+        noDataContainer: {
+          width: moderateScale(250),
+          height: moderateScale(150),
+          backgroundColor: colors.surface,
+          borderRadius: moderateScale(10),
+          justifyContent: "center",
+          alignItems: "center",
+          padding: moderateScale(20),
+        },
+        noDataText: {
+          fontSize: moderateScale(14),
+          color: commonColors.gray300,
+          textAlign: "center",
+        },
+      }),
+    [isRTL, theme, colors]
+  );
 };
 
 export default useRTLStyles;

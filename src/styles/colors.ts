@@ -1,8 +1,8 @@
 // Common colors that don't change with theme
 export const commonColors = {
     // Brand Colors
-    primary: '#00A13A',
-    secondary: '#CD0105',
+    primary: '#8CC63F',
+    secondary: '#46983C',
 
     // Status Colors
     success: '#00A13A',
@@ -42,7 +42,7 @@ const lightColors = {
     inputBorder: commonColors.gray100,
     inputPlaceholder: commonColors.blackOpacity60,
     inputText: commonColors.black,
-    statusBar: 'dark-content',
+    statusBar: 'light-content',
 
     // Buttons
     buttonPrimary: commonColors.primary,

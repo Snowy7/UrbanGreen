@@ -22,7 +22,11 @@ const WrapperContainer: React.FC<WrapperContainerProps> = ({
             style={[styles.container, style, { backgroundColor: colors.background }]}
             {...safeAreaProps}
         >
-            <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} />
+            <StatusBar 
+                barStyle={colors.statusBar} 
+                backgroundColor="transparent"
+                translucent
+            />
             {children}
         </SafeAreaView>
     );
@@ -31,7 +35,7 @@ const WrapperContainer: React.FC<WrapperContainerProps> = ({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    }
+    },
 });
 
 export default React.memo(WrapperContainer);

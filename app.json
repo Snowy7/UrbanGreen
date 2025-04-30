@@ -1,33 +1,45 @@
 {
   "expo": {
-    "name": "expo_boilerplate",
-    "slug": "expo_boilerplate",
+    "name": "UrbanGreen",
+    "slug": "urbangreen",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#8CC63F"
     },
     "ios": {
       "supportsTablet": true,
       "buildNumber": "1.0.0",
-      "bundleIdentifier": "boilerplate.expo"
+      "bundleIdentifier": "com.snowy.urbangreem",
+      "permissions": ["ios.permission.LOCATION_WHEN_IN_USE"]
     },
     "android": {
       "versionCode": 1,
       "allowBackup": false,
-      "package": "boilerplate.expo",
+      "package": "com.snowy.urbangreem",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "softwareKeyboardLayoutMode": "pan",
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ]
     },
-    "platforms": [
-      "ios",
-      "android"
+    "platforms": ["ios", "android"],
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
     ]
   }
 }

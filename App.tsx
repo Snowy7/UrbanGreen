@@ -2,7 +2,7 @@
  * @file App.tsx
  * @description Root application component that initializes core app functionality
  * including fonts, internationalization, Redux store, and navigation.
- * 
+ *
  * This component handles:
  * - Custom font loading
  * - RTL configuration (explicitly disabled for controlled management)
@@ -13,31 +13,39 @@
  */
 
 import "@/lang";
-import Routes from '@/navigation/Routes';
+import Routes from "@/navigation/Routes";
 import store from "@/redux/store";
 import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import React, { useEffect } from 'react';
-import { I18nManager } from "react-native";
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from "react";
+import { I18nManager, StatusBar, Animated } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
-import { ThemeProvider } from '@/context/ThemeContext';
+import { ThemeProvider } from "@/context/ThemeContext";
 import { getLocalItem } from "@/utils/checkStorage";
+import { ClerkProvider, ClerkLoaded, useAuth } from "@clerk/clerk-expo";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
+import * as NavigationBar from "expo-navigation-bar";
+import { ConvexReactClient } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+import SplashScreen from "@/components/SplashScreen";
+
+const clerkKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
+  unsavedChangesWarning: false,
+});
 
 /**
  * Main application component that serves as the entry point for the app.
- * 
+ *
  * @returns {JSX.Element | null} The rendered app or null during font loading
  */
 const App = () => {
+  const [isAppReady, setIsAppReady] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(1));
+
   /**
    * Load custom fonts using Expo's useFonts hook
-   * 
-   * @remarks
-   * The app uses Inter font family with various weights
-   * loaded asynchronously at startup
-   * 
-   * @returns {[boolean, Error | null]} Tuple containing loading status and potential error
    */
   const [loaded, error] = useFonts({
     "Inter-Regular": require("./src/assets/fonts/Inter-Regular.ttf"),
@@ -46,48 +54,63 @@ const App = () => {
     "Inter-SemiBold": require("./src/assets/fonts/Inter-SemiBold.ttf"),
   });
 
-  /**
-   * Setup effect hook that runs on component mount and when font loading status changes
-   * 
-   * @effects
-   * - Configures RTL behavior (currently disabled for manual control)
-   * - Initializes storage by retrieving persisted user settings
-   * - Hides the splash screen once fonts are loaded or an error occurs
-   */
   useEffect(() => {
     // Disable automatic RTL handling - we manage this explicitly through i18n
     I18nManager.allowRTL(false);
     I18nManager.forceRTL(false);
-    
-    // Initialize app from stored user preferences (theme, language, auth state)
+
+    // Initialize app from stored user preferences
     getLocalItem();
-    
-    // Hide splash screen once fonts are loaded or if there was an error
+
+    // Set navigation bar to transparent
+    StatusBar.setBarStyle("light-content");
+    StatusBar.setTranslucent(true);
+    NavigationBar.setBackgroundColorAsync("transparent");
+    NavigationBar.setPositionAsync("absolute");
+
     if (loaded || error) {
-      SplashScreen.hideAsync();
+      // Start fade out animation
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        setIsAppReady(true);
+      });
     }
-  }, [loaded, error]);
+  }, [loaded, error, fadeAnim]);
 
-  // Return null during font loading to avoid rendering with incorrect fonts
-  if (!loaded && !error) {
-    return null;
-  }
-
-  /**
-   * Main app structure with providers in the following order:
-   * 1. SafeAreaProvider - Handles safe areas for notched devices
-   * 2. Redux Provider - Provides global state management
-   * 3. ThemeProvider - Manages light/dark theme
-   * 4. Routes - Navigation container and routing structure
-   */
   return (
-    <SafeAreaProvider>
-      <Provider store={store}>
-        <ThemeProvider>
-          <Routes />
-        </ThemeProvider>
-      </Provider>
-    </SafeAreaProvider>
+    <>
+      {!isAppReady && (
+        <Animated.View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            opacity: fadeAnim,
+            zIndex: 1,
+          }}
+        >
+          <SplashScreen />
+        </Animated.View>
+      )}
+      <SafeAreaProvider>
+        <Provider store={store}>
+          <ThemeProvider>
+            <ClerkProvider publishableKey={clerkKey} tokenCache={tokenCache}>
+              <ClerkLoaded>
+                <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+                  <Routes />
+                </ConvexProviderWithClerk>
+              </ClerkLoaded>
+            </ClerkProvider>
+          </ThemeProvider>
+        </Provider>
+      </SafeAreaProvider>
+    </>
   );
 };
 

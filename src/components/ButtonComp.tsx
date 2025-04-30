@@ -6,6 +6,7 @@ import {
     TextStyle,
     DimensionValue,
     View,
+    ActivityIndicator,
 } from 'react-native';
 import TextComp from './TextComp';
 import { commonColors } from '@/styles/colors';
@@ -25,6 +26,7 @@ interface ButtonCompProps {
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
     iconSize?: number;
+    isLoading?: boolean;
 }
 
 const ButtonComp: React.FC<ButtonCompProps> = ({
@@ -39,6 +41,7 @@ const ButtonComp: React.FC<ButtonCompProps> = ({
     leftIcon,
     rightIcon,
     iconSize = 24,
+    isLoading = false,
 }) => {
     const isRTL = useIsRTL();
     const styles = useRTLStyles(isRTL);
@@ -75,7 +78,11 @@ const ButtonComp: React.FC<ButtonCompProps> = ({
                     {leftIcon}
                 </View>
             )}
-            <TextComp style={textStyles} text={title} />
+            {isLoading ? (
+                <ActivityIndicator size="small" color={commonColors.white} />
+            ) : (
+                <TextComp style={textStyles} text={title} />
+            )}
            
             {rightIcon && (
                 <View style={iconContainerStyle}>

@@ -1,95 +1,158 @@
 //import liraries
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useState } from "react";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useSignIn } from "@clerk/clerk-expo";
 
-import ButtonComp from '@/components/ButtonComp';
-import HeaderComp from '@/components/HeaderComp';
-import TextComp from '@/components/TextComp';
-import TextInputComp from '@/components/TextInputComp';
-import WrapperContainer from '@/components/WrapperContainer';
-import useIsRTL from '@/hooks/useIsRTL';
-import { AuthStackParamList } from '@/navigation/types';
+import ButtonComp from "@/components/ButtonComp";
+import HeaderComp from "@/components/HeaderComp";
+import TextComp from "@/components/TextComp";
+import TextInputComp from "@/components/TextInputComp";
+import WrapperContainer from "@/components/WrapperContainer";
+import useIsRTL from "@/hooks/useIsRTL";
+import { AuthStackParamList } from "@/navigation/types";
 
-import { useTheme } from '@/context/ThemeContext';
-import useRTLStyles from './styles';
+import { useTheme } from "@/context/ThemeContext";
+import useRTLStyles from "./styles";
+import { moderateScale, verticalScale } from "@/styles/scaling";
+import { commonColors } from "@/styles/colors";
+import { BackArrowIcon } from "@/assets/icons";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const Login = () => {
-    const isRTL = useIsRTL();
-    const {  theme } = useTheme();
+  const { theme } = useTheme();
+  const isRTL = useIsRTL();
+  const styles = useRTLStyles(isRTL, theme);
+  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+  const { isLoaded, signIn, setActive } = useSignIn();
 
-    const styles = useRTLStyles(isRTL, theme);
-    const [email, setEmail] = useState('');
-    const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-    const handleNext = () => {
-        navigation.navigate('OTPVerification', { phoneNumber: '1234567890' });
-        // TODO: Implement next step logic
-    };
+  const handleLogin = async () => {
+    if (!isLoaded) return;
+    setLoading(true);
+    setError("");
 
-    const handleSignUp = () => {
-        navigation.navigate('Signup');
-    };
+    try {
+      const result = await signIn.create({
+        identifier: email,
+        password,
+      });
 
-    return (
-        <WrapperContainer style={styles.container}>
-            <HeaderComp showBack={false} customStyle={styles.header} />
-            <View style={styles.content}>
-                <View>
-                    {/* Title Section */}
-                    <View style={styles.titleSection}>
-                        <TextComp
-                            text='SIGN_IN_TO_ACCOUNT'
-                            style={styles.title}
-                        />
-                        <View style={styles.signUpPrompt}>
-                            <TextComp
-                                text='DONT_HAVE_ACCOUNT'
-                                style={styles.greyText}
-                            />
-                            <TextComp
-                                text='SIGN_UP'
-                                style={styles.signUpLink}
-                                onPress={handleSignUp}
-                            />
-                        </View>
-                    </View>
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+      } else {
+        console.error("Sign in not complete:", result);
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                    {/* Form Section */}
-                    <View style={styles.formSection}>
-                        <TextComp
-                            text='EMAIL_ID'
-                            style={styles.inputLabel}
-                        />
-                        <TextInputComp
-                            value={email}
-                            onChangeText={setEmail}
-                            placeholder='YOUR_EMAIL_ID'
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                        />
-                    </View>
+  const handleCreateAccount = () => {
+    navigation.navigate("Signup");
+  };
 
-                    {/* Button Section */}
-                    <View style={styles.buttonSection}>
-                        <ButtonComp
-                            title='NEXT'
-                            onPress={handleNext}
-                            style={styles.nextButton}
-                        />
-                     
-                    </View>
-                </View>
+  const handleForgotPassword = () => {
+    // TODO: Implement forgot password navigation
+    console.log("Forgot password pressed");
+  };
 
-                {/* Terms Section */}
-                <TextComp
-                    text='TERMS_AGREEMENT'
-                    style={styles.termsText}
-                />
+  return (
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <LoadingOverlay visible={loading} />
+      <LinearGradient
+        colors={[commonColors.primary, commonColors.secondary, "#006837"]}
+        start={{ x: 0.1, y: 0.1 }}
+        end={{ x: 0.9, y: 0.9 }}
+        style={styles.background}
+      />
+
+      <View style={styles.content}>
+        <View style={styles.welcomeContainer}>
+          <TextComp text="WELCOME_BACK" style={styles.welcomeText} />
+
+          <TextComp text="SIGN_IN_TO_CONTINUE" style={styles.subtitleText} />
+        </View>
+        <View style={styles.whiteBoard}>
+          <ScrollView
+            contentContainerStyle={{ flex: 1 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {error && (
+              <View style={styles.errorContainer}>
+                <TextComp text={error} style={styles.errorText} />
+              </View>
+            )}
+
+            <View style={styles.inputsContainer}>
+              <TextComp text="EMAIL" style={styles.inputLabel} />
+              <TextInputComp
+                placeholder="ENTER_EMAIL"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={styles.input}
+                containerStyle={styles.inputContainer}
+                placeholderTextColor={commonColors.gray200}
+              />
             </View>
-        </WrapperContainer>
-    );
+
+            <View style={styles.inputsContainer}>
+              <TextComp text="PASSWORD" style={styles.inputLabel} />
+              <TextInputComp
+                placeholder="ENTER_PASSWORD"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={styles.input}
+                containerStyle={styles.inputContainer}
+                placeholderTextColor={commonColors.gray200}
+              />
+            </View>
+
+            <TouchableOpacity onPress={handleForgotPassword} style={styles.forgotPasswordContainer}>
+              <TextComp text="FORGOT_PASSWORD" style={styles.forgotPasswordText} />
+            </TouchableOpacity>
+
+            <ButtonComp
+              title="LOGIN"
+              onPress={handleLogin}
+              disabled={loading}
+              style={styles.loginButton}
+            />
+          </ScrollView>
+          <TouchableOpacity onPress={handleCreateAccount} style={styles.createAccountContainer}>
+            <TextComp text="NO_ACCOUNT_CREATE_NEW" style={styles.createAccountText} />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* back arrow */}
+      <TouchableOpacity onPress={() => navigation.navigate("Onboard")} style={styles.backArrow}>
+        <BackArrowIcon />
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
+  );
 };
 
 export default Login;

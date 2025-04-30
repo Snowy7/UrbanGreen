@@ -7,6 +7,7 @@ import {
     View,
     TextStyle,
     TouchableOpacity,
+    Dimensions,
 } from 'react-native';
 import fontFamily from '@/styles/fontFamily';
 import { moderateScale } from '@/styles/scaling';
@@ -36,9 +37,8 @@ const TextInputComp: React.FC<TextInputCompProps> = ({
     onRightIconPress,
     ...props
 }) => {
-
     const { theme } = useTheme();
-    const isRTL = useIsRTL()
+    const isRTL = useIsRTL();
     const styles = useRTLStyles(isRTL, theme);
     const colors = Colors[theme ?? 'light'];
 
@@ -75,6 +75,7 @@ const TextInputComp: React.FC<TextInputCompProps> = ({
 
 const useRTLStyles = (isRTL: boolean, theme?: ThemeType) => {
     const colors = Colors[theme];
+    const { width } = Dimensions.get('window');
 
     return StyleSheet.create({
         container: {
@@ -85,16 +86,18 @@ const useRTLStyles = (isRTL: boolean, theme?: ThemeType) => {
             padding: moderateScale(14),
             flexDirection: isRTL ? 'row-reverse' : 'row',
             alignItems: 'center',
+            minHeight: moderateScale(48),
+            width: width - moderateScale(40), // Full width minus padding
         },
         input: {
-            flex: 1,
             fontFamily: fontFamily.regular,
             fontSize: moderateScale(14),
             color: colors.text,
             padding: 0,
             margin: 0,
+            width: 100,
+            textAlignVertical: 'center',
         },
-
         errorContainer: {
             borderColor: commonColors.error,
         },

@@ -1,0 +1,9 @@
+{
+  "EVENT_CATEGORY": "Event Category",
+  "EVENT_CATEGORY_ENVIRONMENTAL": "Environmental",
+  "EVENT_CATEGORY_COMMUNITY": "Community",
+  "EVENT_CATEGORY_EDUCATIONAL": "Educational",
+  "EVENT_CATEGORY_MAINTENANCE": "Maintenance",
+  "EVENT_CATEGORY_CULTURAL": "Cultural",
+  "EVENT_CATEGORY_OTHER": "Other"
+} 
