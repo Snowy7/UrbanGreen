@@ -37,14 +37,6 @@ const WEEK_DAYS = [
   "SUNDAY",
 ];
 
-const GREENSPACE_TYPES = [
-  { label: "Park", value: "Park" },
-  { label: "Garden", value: "Garden" },
-  { label: "Playground", value: "Playground" },
-  { label: "Nature Reserve", value: "Nature Reserve" },
-  { label: "Community Garden", value: "Community Garden" },
-];
-
 const AddGreenspaceScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   const { theme } = useTheme();
@@ -69,7 +61,6 @@ const AddGreenspaceScreen = () => {
     images: [] as ImagePicker.ImagePickerAsset[],
     openTime: new Date(),
     closeTime: new Date(),
-    type: "",
   });
 
   const [showOpenTimePicker, setShowOpenTimePicker] = useState(false);
@@ -330,17 +321,6 @@ const AddGreenspaceScreen = () => {
                 style={styles.input}
                 containerStyle={styles.inputContainer}
                 placeholderTextColor={commonColors.gray200}
-              />
-            </View>
-
-            <View style={styles.inputsContainer}>
-              <TextComp text="TYPE" style={styles.inputLabel} />
-              <CustomPicker
-                value={formData.type}
-                onValueChange={(value) => setFormData({ ...formData, type: value as string })}
-                items={GREENSPACE_TYPES}
-                placeholder="SELECT_TYPE"
-                containerStyle={styles.inputContainer}
               />
             </View>
 
