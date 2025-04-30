@@ -9,28 +9,27 @@ import TextComp from "@/components/TextComp";
 import { moderateScale, verticalScale } from "@/styles/scaling";
 import TextInputComp from "@/components/TextInputComp";
 import ButtonComp from "@/components/ButtonComp";
+import CustomPicker from "@/components/CustomPicker";
 import { LinearGradient } from "expo-linear-gradient";
 import { BackArrowIcon, CalendarIcon, ClockIcon } from "@/assets/icons";
 import useRTLStyles from "./styles";
 import useIsRTL from "@/hooks/useIsRTL";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Picker } from "@react-native-picker/picker";
 import { useGreenSpaces } from "@/hooks/useGreenSpaces";
 
 type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "UpdateEvent">;
-type RouteProp = RouteProp<AdminStackParamList, "UpdateEvent">;
 
 const EVENT_CATEGORIES = [
-  "Environmental Volunteer Activity",
-  "Educational Workshop",
-  "Community Gathering",
-  "Nature Walk",
-  "Gardening Workshop",
+  { label: "Environmental Volunteer Activity", value: "Environmental Volunteer Activity" },
+  { label: "Educational Workshop", value: "Educational Workshop" },
+  { label: "Community Gathering", value: "Community Gathering" },
+  { label: "Nature Walk", value: "Nature Walk" },
+  { label: "Gardening Workshop", value: "Gardening Workshop" },
 ];
 
 const UpdateEventScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const route = useRoute<RouteProp>();
+  const route = useRoute<RouteProp<AdminStackParamList, "UpdateEvent">>();
   const { theme } = useTheme();
   const colors = Colors[theme];
   const isRTL = useIsRTL();
@@ -41,7 +40,7 @@ const UpdateEventScreen = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    category: EVENT_CATEGORIES[0],
+    category: EVENT_CATEGORIES[0].value,
     date: new Date(),
     startTime: new Date(),
     endTime: new Date(),
@@ -60,7 +59,7 @@ const UpdateEventScreen = () => {
         // For now, we'll use mock data
         setFormData({
           name: "Sample Event",
-          category: EVENT_CATEGORIES[0],
+          category: EVENT_CATEGORIES[0].value,
           date: new Date(),
           startTime: new Date(),
           endTime: new Date(),
@@ -140,18 +139,14 @@ const UpdateEventScreen = () => {
             </View>
 
             <View style={styles.inputsContainer}>
-              <TextComp text="EVENT_CATEGORY" style={styles.inputLabel} />
-              <View style={[styles.inputContainer, styles.pickerContainer]}>
-                <Picker
-                  selectedValue={formData.category}
-                  onValueChange={(value) => setFormData({ ...formData, category: value })}
-                  style={styles.picker}
-                >
-                  {EVENT_CATEGORIES.map((category) => (
-                    <Picker.Item key={category} label={category} value={category} />
-                  ))}
-                </Picker>
-              </View>
+              <TextComp text="Event Category" style={styles.inputLabel} />
+              <CustomPicker
+                value={formData.category}
+                onValueChange={(value) => setFormData({ ...formData, category: value })}
+                items={EVENT_CATEGORIES}
+                placeholder="SELECT_CATEGORY"
+                containerStyle={styles.inputContainer}
+              />
             </View>
 
             <View style={styles.inputsContainer}>
@@ -260,21 +255,21 @@ const UpdateEventScreen = () => {
 
             <View style={styles.inputsContainer}>
               <TextComp text="LOCATION" style={styles.inputLabel} />
-              <View style={[styles.inputContainer, styles.pickerContainer]}>
-                <Picker
-                  selectedValue={formData.location}
-                  onValueChange={(value) => setFormData({ ...formData, location: value })}
-                  style={styles.picker}
-                >
-                  {greenSpaces?.map((space) => (
-                    <Picker.Item key={space._id} label={space.name} value={space._id} />
-                  ))}
-                </Picker>
-              </View>
+              <CustomPicker
+                value={formData.location}
+                onValueChange={(value) => setFormData({ ...formData, location: value })}
+                items={greenSpaces?.map(space => ({
+                  label: space.name,
+                  value: space._id
+                })) || []}
+                placeholder="Select Location"
+                containerStyle={styles.inputContainer}
+                disabled={!greenSpaces?.length}
+              />
             </View>
 
             <ButtonComp
-              title="UPDATE_EVENT"
+              title="Update Event"
               onPress={handleSubmit}
               isLoading={loading}
               style={styles.submitButton}

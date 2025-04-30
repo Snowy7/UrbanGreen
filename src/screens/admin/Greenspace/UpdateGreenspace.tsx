@@ -20,7 +20,7 @@ import { api } from "convex/_generated/api";
 import { useGreenSpaces } from "@/hooks/useGreenSpaces";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useTranslation } from "react-i18next";
-import { Picker } from "@react-native-picker/picker";
+import CustomPicker from "@/components/CustomPicker";
 import { Id } from "convex/_generated/dataModel";
 
 type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "UpdateGreenspace">;
@@ -34,6 +34,14 @@ const WEEK_DAYS = [
   "FRIDAY",
   "SATURDAY",
   "SUNDAY",
+];
+
+const GREENSPACE_TYPES = [
+  { label: "Park", value: "Park" },
+  { label: "Garden", value: "Garden" },
+  { label: "Playground", value: "Playground" },
+  { label: "Nature Reserve", value: "Nature Reserve" },
+  { label: "Community Garden", value: "Community Garden" },
 ];
 
 const UpdateGreenspaceScreen = () => {
@@ -62,6 +70,7 @@ const UpdateGreenspaceScreen = () => {
     images: [] as ImagePicker.ImagePickerAsset[],
     openTime: new Date(),
     closeTime: new Date(),
+    type: "",
   });
 
   const [showOpenTimePicker, setShowOpenTimePicker] = useState(false);
@@ -93,6 +102,7 @@ const UpdateGreenspaceScreen = () => {
             images: [], // We'll handle images separately
             openTime: new Date(), // You'll need to parse the time from workingTime
             closeTime: new Date(), // You'll need to parse the time from workingTime
+            type: greenspace.type,
           });
         }
       } catch (error) {
@@ -299,24 +309,20 @@ const UpdateGreenspaceScreen = () => {
 
             <View style={styles.inputsContainer}>
               <TextComp text="SELECT_WORKING_DAYS" style={styles.inputLabel} />
-              <View style={[styles.inputContainer, styles.pickerContainer]}>
-                <Picker
-                  selectedValue=""
-                  onValueChange={handleWorkingDaysChange}
-                  style={styles.picker}
-                  mode="dropdown"
-                >
-                  <Picker.Item label={t("SELECT_WORKING_DAYS")} value="" />
-                  {WEEK_DAYS.map((day) => (
-                    <Picker.Item 
-                      key={day} 
-                      label={t(day)} 
-                      value={day}
-                      color={formData.workingDays.includes(day) ? commonColors.primary : commonColors.gray500}
-                    />
-                  ))}
-                </Picker>
-              </View>
+              <CustomPicker
+                value=""
+                onValueChange={handleWorkingDaysChange}
+                items={[
+                  { label: t("SELECT_WORKING_DAYS"), value: "" },
+                  ...WEEK_DAYS.map(day => ({
+                    label: t(day),
+                    value: day,
+                    color: formData.workingDays.includes(day) ? commonColors.primary : commonColors.gray500
+                  }))
+                ]}
+                placeholder="SELECT_WORKING_DAYS"
+                containerStyle={styles.inputContainer}
+              />
               <View style={styles.selectedDaysContainer}>
                 {formData.workingDays.map((day) => (
                   <View key={day} style={styles.selectedDayTag}>
@@ -368,6 +374,17 @@ const UpdateGreenspaceScreen = () => {
                 style={styles.input}
                 containerStyle={styles.inputContainer}
                 placeholderTextColor={commonColors.gray200}
+              />
+            </View>
+
+            <View style={styles.inputsContainer}>
+              <TextComp text="TYPE" style={styles.inputLabel} />
+              <CustomPicker
+                value={formData.type}
+                onValueChange={(value) => setFormData({ ...formData, type: value })}
+                items={GREENSPACE_TYPES}
+                placeholder="SELECT_TYPE"
+                containerStyle={styles.inputContainer}
               />
             </View>
 

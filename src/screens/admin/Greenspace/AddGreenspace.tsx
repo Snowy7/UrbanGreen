@@ -23,6 +23,7 @@ import { api } from "convex/_generated/api";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";
+import CustomPicker from "@/components/CustomPicker";
 
 type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "AddGreenspace">;
 
@@ -34,6 +35,14 @@ const WEEK_DAYS = [
   "FRIDAY",
   "SATURDAY",
   "SUNDAY",
+];
+
+const GREENSPACE_TYPES = [
+  { label: "Park", value: "Park" },
+  { label: "Garden", value: "Garden" },
+  { label: "Playground", value: "Playground" },
+  { label: "Nature Reserve", value: "Nature Reserve" },
+  { label: "Community Garden", value: "Community Garden" },
 ];
 
 const AddGreenspaceScreen = () => {
@@ -60,6 +69,7 @@ const AddGreenspaceScreen = () => {
     images: [] as ImagePicker.ImagePickerAsset[],
     openTime: new Date(),
     closeTime: new Date(),
+    type: "",
   });
 
   const [showOpenTimePicker, setShowOpenTimePicker] = useState(false);
@@ -332,6 +342,17 @@ const AddGreenspaceScreen = () => {
                 style={styles.input}
                 containerStyle={styles.inputContainer}
                 placeholderTextColor={commonColors.gray200}
+              />
+            </View>
+
+            <View style={styles.inputsContainer}>
+              <TextComp text="TYPE" style={styles.inputLabel} />
+              <CustomPicker
+                value={formData.type}
+                onValueChange={(value) => setFormData({ ...formData, type: value })}
+                items={GREENSPACE_TYPES}
+                placeholder="SELECT_TYPE"
+                containerStyle={styles.inputContainer}
               />
             </View>
 
