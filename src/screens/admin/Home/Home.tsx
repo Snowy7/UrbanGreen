@@ -68,7 +68,7 @@ const Home = () => {
                 width={moderateScale(30)}
                 height={moderateScale(30)}
               />
-              <TextComp text="Manage Green Spaces" style={styles.cardTitle} />
+              <TextComp text="Manage Greenspaces" style={styles.cardTitle} />
             </TouchableOpacity>
             <TouchableOpacity 
               style={styles.card}

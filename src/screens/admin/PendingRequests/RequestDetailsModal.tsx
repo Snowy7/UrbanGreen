@@ -21,7 +21,7 @@ interface ContentRequest {
   endTime?: string;
   eventDescription?: string;
   eventLocation?: string;
-  // Green Space fields
+  // Greenspace fields
   greenSpaceName?: string;
   entryPrice?: number;
   plantInfo?: string;
@@ -48,7 +48,7 @@ const RequestDetailsModal = ({ visible, onClose, request, onApprove, onReject }:
   if (!request) return null;
 
   const isEvent = request.type === 'Add Event';
-  const isGreenSpace = request.type === 'Add Green Space' || request.type === 'Update Green Space';
+  const isGreenSpace = request.type === 'Add Greenspace' || request.type === 'Update Greenspace';
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
@@ -89,7 +89,7 @@ const RequestDetailsModal = ({ visible, onClose, request, onApprove, onReject }:
             {isGreenSpace && (
               <>
                 <View style={styles.section}>
-                  <TextComp text="Green Space Details" style={[styles.sectionTitle, { color: colors.text }]} />
+                  <TextComp text="Greenspace Details" style={[styles.sectionTitle, { color: colors.text }]} />
                   <View style={styles.detailItem}>
                     <Ionicons name="business-outline" size={20} color={commonColors.primary} />
                     <TextComp text={request.greenSpaceName} style={[styles.detailText, { color: colors.textSecondary }]} />

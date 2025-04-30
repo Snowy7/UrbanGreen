@@ -51,7 +51,7 @@ const RequestDetails = () => {
           description: request.eventDescription || '',
           location: request.eventLocation || '',
         });
-      } else if (request.type === 'Add Green Space') {
+      } else if (request.type === 'Add Greenspace') {
         await createGreenSpace({
           name: request.greenSpaceName || '',
           entryPrice: request.entryPrice || 0,
@@ -63,7 +63,7 @@ const RequestDetails = () => {
           facilities: request.facilities || '',
           images: request.images || [],
         });
-      } else if (request.type === 'Update Green Space') {
+      } else if (request.type === 'Update Greenspace') {
         if (!request._id) return;
         await updateGreenSpace({
           id: request._id,
@@ -105,7 +105,7 @@ const RequestDetails = () => {
   }
 
   const isEvent = request.type === 'Add Event';
-  const isGreenSpace = request.type === 'Add Green Space' || request.type === 'Update Green Space';
+  const isGreenSpace = request.type === 'Add Greenspace' || request.type === 'Update Greenspace';
 
   const getHeroTitle = () => {
     if (isEvent) return request.name || '';
@@ -192,7 +192,7 @@ const RequestDetails = () => {
             {isGreenSpace && (
               <>
                 <View style={styles.section}>
-                  <TextComp text="Green Space Details" style={styles.sectionTitle} />
+                  <TextComp text="Greenspace Details" style={styles.sectionTitle} />
                   <View style={styles.detailItem}>
                     <Ionicons name="business-outline" size={16} color={commonColors.primary} />
                     <TextComp text={request.greenSpaceName} style={[styles.detailText, { color: colors.textSecondary }]} />

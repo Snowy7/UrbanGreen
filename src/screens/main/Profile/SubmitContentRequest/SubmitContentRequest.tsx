@@ -14,7 +14,7 @@ import ButtonComp from "@/components/ButtonComp";
 import { Image } from "react-native";
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, "SubmitContentRequest">;
 
-const REQUEST_TYPES = ["Add Event", "Add Green Space", "Update Green Space"];
+const REQUEST_TYPES = ["Add Event", "Add Greenspace", "Update Greenspace"];
 
 const SubmitContentRequest = () => {
   const { theme } = useTheme();
@@ -27,10 +27,10 @@ const SubmitContentRequest = () => {
       case "Add Event":
         navigation.navigate("AddEventForm");
         break;
-      case "Add Green Space":
+      case "Add Greenspace":
         navigation.navigate("AddGreenSpaceForm");
         break;
-      case "Update Green Space":
+      case "Update Greenspace":
         navigation.navigate("UpdateGreenSpaceForm");
         break;
     }

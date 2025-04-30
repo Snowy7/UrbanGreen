@@ -48,7 +48,7 @@ const GreenSpaces = () => {
             style={styles.heroGradient}
           />
           <View style={styles.heroTextContainer}>
-            <TextComp text="Green Spaces" style={styles.heroText} />
+            <TextComp text="Greenspaces" style={styles.heroText} />
             <View style={[styles.searchInputContainer]}>
               <Ionicons
                 name="search"
@@ -69,7 +69,7 @@ const GreenSpaces = () => {
 
         <View style={styles.whiteBoard}>
           <View style={styles.searchContainer}>
-            <TextComp text="All Green Spaces" style={styles.allText} />
+            <TextComp text="All Greenspaces" style={styles.allText} />
             <View style={[styles.filterContainer, { backgroundColor: colors.surface }]}>
 
             </View>

@@ -9,7 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BackArrowIcon } from "@/assets/icons";
 import { Picker } from "@react-native-picker/picker";
 
-type RequestType = "Add Event" | "Add Green Space" | "Update Green Space";
+type RequestType = "Add Event" | "Add Greenspace" | "Update Greenspace";
 
 interface RequestTypeModalProps {
   visible: boolean;
@@ -51,8 +51,8 @@ const RequestTypeModal = ({ visible, onClose, onContinue }: RequestTypeModalProp
                 style={styles.picker}
               >
                 <Picker.Item label="Add Event" value="Add Event" />
-                <Picker.Item label="Add Green Space" value="Add Green Space" />
-                <Picker.Item label="Update Green Space" value="Update Green Space" />
+                <Picker.Item label="Add Greenspace" value="Add Greenspace" />
+                <Picker.Item label="Update Greenspace" value="Update Greenspace" />
               </Picker>
             </View>
 

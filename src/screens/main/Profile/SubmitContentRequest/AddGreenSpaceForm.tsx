@@ -248,7 +248,7 @@ const AddGreenSpaceForm = () => {
       });
 
       await createContentRequest({
-        type: "Add Green Space",
+        type: "Add Greenspace",
         title: `Add green space request: ${formData.name.trim()}`,
         description,
         status: "pending",
@@ -277,14 +277,14 @@ const AddGreenSpaceForm = () => {
             style={styles.heroGradient}
           />
           <View style={styles.heroTextContainer}>
-            <TextComp text="Add Green Space Request" style={styles.heroText} />
+            <TextComp text="Add Greenspace Request" style={styles.heroText} />
           </View>
         </View>
 
         <View style={styles.whiteBoard}>
           <ScrollView style={styles.formContainer}>
             <View style={styles.inputsContainer}>
-              <TextComp text="Green Space Name" style={styles.inputLabel} />
+              <TextComp text="Greenspace Name" style={styles.inputLabel} />
               <TextInputComp
                 value={formData.name}
                 onChangeText={(text) => {

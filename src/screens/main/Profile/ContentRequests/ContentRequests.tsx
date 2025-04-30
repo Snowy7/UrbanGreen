@@ -75,7 +75,7 @@ const ContentRequests = () => {
 
   const renderRequestItem = ({ item }) => {
     const isEvent = item.type === "Add Event";
-    const isGreenSpace = item.type === "Add Green Space" || item.type === "Update Green Space";
+    const isGreenSpace = item.type === "Add Greenspace" || item.type === "Update Greenspace";
 
     return (
       <TouchableOpacity

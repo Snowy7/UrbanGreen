@@ -101,7 +101,7 @@ const Home = () => {
               width={moderateScale(30)}
               height={moderateScale(30)}
             />
-            <TextComp text="Green Spaces" style={styles.cardTitle} />
+            <TextComp text="Greenspaces" style={styles.cardTitle} />
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.card}
@@ -116,7 +116,7 @@ const Home = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Recommended Green Spaces Section */}
+        {/* Recommended Greenspaces Section */}
         <View style={styles.sectionTitleContainer}>
           <TextComp text="Recommended For You" style={styles.sectionTitle} />
           <TouchableOpacity 
