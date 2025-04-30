@@ -257,13 +257,13 @@ const UpdateGreenSpaceForm = () => {
               style={styles.heroGradient}
             />
             <View style={styles.heroTextContainer}>
-              <TextComp text="Select Green space to Update" style={styles.heroText} />
+              <TextComp text="Select Green Space to Update" style={styles.heroText} />
             </View>
           </View>
 
           <View style={styles.whiteBoard}>
             <View style={styles.inputsContainer}>
-              <TextComp text="Select Green space" style={styles.inputLabel} />
+              <TextComp text="Select Green Space" style={styles.inputLabel} />
               <View style={styles.pickerContainer}>
                 <CustomPicker
                   value={selectedGreenSpaceId}
@@ -305,14 +305,14 @@ const UpdateGreenSpaceForm = () => {
             style={styles.heroGradient}
           />
           <View style={styles.heroTextContainer}>
-            <TextComp text="Update Green space Request" style={styles.heroText} />
+            <TextComp text="Update Green Space Request" style={styles.heroText} />
           </View>
         </View>
 
         <View style={styles.whiteBoard}>
           <ScrollView style={styles.formContainer}>
             <View style={styles.inputsContainer}>
-              <TextComp text="Green space Name" style={styles.inputLabel} />
+              <TextComp text="Green Space Name" style={styles.inputLabel} />
               <TextInputComp
                 value={formData.name}
                 onChangeText={(text) => setFormData({ ...formData, name: text })}

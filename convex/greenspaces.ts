@@ -29,7 +29,7 @@ export const getById = query({
     const greenSpace = await ctx.db.get(args.id);
 
     if (!greenSpace) {
-      throw new Error("Green space not found");
+      throw new Error("Green Space not found");
     }
 
     const images = [];
@@ -87,7 +87,7 @@ export const update = mutation({
     const greenSpace = await ctx.db.get(id);
 
     if (!greenSpace) {
-      throw new Error("Green space not found");
+      throw new Error("Green Space not found");
     }
 
     await ctx.db.patch(id, {
@@ -114,7 +114,7 @@ export const remove = mutation({
     const greenSpace = await ctx.db.get(args.id);
 
     if (!greenSpace) {
-      throw new Error("Green space not found");
+      throw new Error("Green Space not found");
     }
 
     await ctx.db.delete(args.id);

@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "convex/react";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
+import { BackArrowIcon } from "@/assets/icons";
 
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, "ContentRequests">;
 
@@ -175,6 +176,10 @@ const ContentRequests = () => {
     }
   };
 
+  const handleClose = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -224,6 +229,10 @@ const ContentRequests = () => {
           />
         </View>
       </View>
+
+      <TouchableOpacity onPress={handleClose} style={styles.backArrow}>
+        <BackArrowIcon />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -386,6 +395,14 @@ const styles = StyleSheet.create({
   },
   requestDate: {
     fontSize: moderateScale(12),
+  },
+  backArrow: {
+    position: "absolute",
+    top: verticalScale(40),
+    left: moderateScale(15),
+    padding: moderateScale(10),
+    backgroundColor: "#ffffff55",
+    borderRadius: moderateScale(100),
   },
 });
 

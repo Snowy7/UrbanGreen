@@ -69,7 +69,7 @@ const GreenSpaces = () => {
 
         <View style={styles.whiteBoard}>
           <View style={styles.searchContainer}>
-            <TextComp text="All Green spaces" style={styles.allText} />
+            <TextComp text="All Green Spaces" style={styles.allText} />
             <View style={[styles.filterContainer, { backgroundColor: colors.surface }]}>
 
             </View>

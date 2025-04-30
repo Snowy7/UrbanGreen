@@ -105,7 +105,7 @@ const AddGreenSpaceForm = () => {
 
     // Check for empty or whitespace-only strings
     if (!formData.name || !formData.name.trim()) {
-      newErrors.name = "Green space name is required";
+      newErrors.name = "Green Space name is required";
       isValid = false;
     }
 
@@ -277,14 +277,14 @@ const AddGreenSpaceForm = () => {
             style={styles.heroGradient}
           />
           <View style={styles.heroTextContainer}>
-            <TextComp text="Add Green space Request" style={styles.heroText} />
+            <TextComp text="Add Green Space Request" style={styles.heroText} />
           </View>
         </View>
 
         <View style={styles.whiteBoard}>
           <ScrollView style={styles.formContainer}>
             <View style={styles.inputsContainer}>
-              <TextComp text="Green space Name" style={styles.inputLabel} />
+              <TextComp text="Green Space Name" style={styles.inputLabel} />
               <TextInputComp
                 value={formData.name}
                 onChangeText={(text) => {

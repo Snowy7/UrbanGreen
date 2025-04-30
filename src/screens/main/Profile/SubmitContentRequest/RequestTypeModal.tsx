@@ -51,8 +51,8 @@ const RequestTypeModal = ({ visible, onClose, onContinue }: RequestTypeModalProp
                 onValueChange={(value) => setSelectedType(value as RequestType)}
                 items={[
                   { label: "Add Event", value: "Add Event" },
-                  { label: "Add Green space", value: "Add Greenspace" },
-                  { label: "Update Green space", value: "Update Greenspace" }
+                  { label: "Add Green Space", value: "Add Greenspace" },
+                  { label: "Update Green Space", value: "Update Greenspace" }
                 ]}
                 placeholder="SELECT_REQUEST_TYPE"
                 containerStyle={styles.picker}
