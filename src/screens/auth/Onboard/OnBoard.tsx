@@ -85,14 +85,14 @@ const Onboard = () => {
       </View>
 
       {/* Language Selector */}
-      <Pressable style={styles.languageContainer} onPress={() => changeLanguageState(isRTL ? { name: 'English', sortName: 'en' } : { name: 'Arabic', sortName: 'ar' })}>
+      {/* <Pressable style={styles.languageContainer} onPress={() => changeLanguageState(isRTL ? { name: 'English', sortName: 'en' } : { name: 'Arabic', sortName: 'ar' })}>
         <LanguageIcon />
         <TextComp
           text={isRTL ? 'AR' : 'EN'}
           style={styles.languageText}
           isDynamic={true}
         />
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 };
