@@ -167,7 +167,7 @@ const AddGreenspaceScreen = () => {
             style={styles.heroGradient}
           />
           <View style={styles.heroTextContainer}>
-            <TextComp text="Add New Green Space" style={styles.heroText} />
+            <TextComp text="Add New GreenSpace" style={styles.heroText} />
           </View>
         </View>
 

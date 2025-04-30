@@ -80,7 +80,7 @@ const Home = () => {
         />
         <View style={styles.heroTextContainer}>
           <TextComp text={`Welcome, ${user?.firstName}`} style={styles.heroText} isDynamic />
-          <TextComp text="Enjoy exploring green Riyadah!" style={styles.heroSubText} />
+          <TextComp text="Enjoy exploring green Riyadh!" style={styles.heroSubText} />
         </View>
       </View>
       <View style={styles.whiteBoard}>
