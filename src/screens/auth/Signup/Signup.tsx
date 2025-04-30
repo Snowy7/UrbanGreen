@@ -45,7 +45,7 @@ const Signup = () => {
 
     try {
       console.log("signup", firstName, lastName, email, phone, password);
-      await signUp.create({
+      const resource =await signUp.create({
         emailAddress: email,
         password,
         firstName: firstName,
@@ -53,14 +53,8 @@ const Signup = () => {
         phoneNumber: phone,
       });
 
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-      navigation.navigate("OTPVerification", {
-        email: email,
-        phone: phone,
-        type: "email",
-        firstName: firstName,
-        lastName: lastName,
-      });
+      // skip verification for now and activate user
+      await setActive({ session: resource.createdSessionId });
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
     } finally {
