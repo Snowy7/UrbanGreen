@@ -15,7 +15,7 @@ import { Image } from "react-native";
 import CustomPicker from "@/components/CustomPicker";
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, "SubmitContentRequest">;
 
-const REQUEST_TYPES = ["Add Event", "Add Greenspace", "Update Greenspace"];
+const REQUEST_TYPES = ["Add Event", "Add Green Space", "Update Green Space"];
 
 const SubmitContentRequest = () => {
   const { theme } = useTheme();
@@ -28,10 +28,10 @@ const SubmitContentRequest = () => {
       case "Add Event":
         navigation.navigate("AddEventForm");
         break;
-      case "Add Greenspace":
+      case "Add Green Space":
         navigation.navigate("AddGreenSpaceForm");
         break;
-      case "Update Greenspace":
+      case "Update Green Space":
         navigation.navigate("UpdateGreenSpaceForm");
         break;
     }
