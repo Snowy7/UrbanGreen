@@ -112,13 +112,23 @@ const AddGreenspaceScreen = () => {
     }));
   };
 
-  const handleWorkingDaysChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      workingDays: prev.workingDays.includes(value)
-        ? prev.workingDays.filter(day => day !== value)
-        : [...prev.workingDays, value]
-    }));
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const imageUrls = await uploadImages();
+      await createGreenSpace({
+        ...formData,
+        entryPrice: Number(formData.entryPrice),
+        workingDays: formData.workingDays.join(","),
+        images: imageUrls,
+        workingTime: `${formatTime(formData.openTime)} - ${formatTime(formData.closeTime)}`,
+      });
+      navigation.goBack();
+    } catch (error) {
+      console.error("Error creating greenspace:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const uploadImages = async () => {
@@ -144,25 +154,6 @@ const AddGreenspaceScreen = () => {
       console.log("imageUrls", imageUrls);
     }
     return imageUrls;
-  };
-
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      const imageUrls = await uploadImages();
-      await createGreenSpace({
-        ...formData,
-        entryPrice: Number(formData.entryPrice),
-        workingDays: formData.workingDays.join(","),
-        images: imageUrls,
-        workingTime: `${formatTime(formData.openTime)} - ${formatTime(formData.closeTime)}`,
-      });
-      navigation.goBack();
-    } catch (error) {
-      console.error("Error creating greenspace:", error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -273,37 +264,34 @@ const AddGreenspaceScreen = () => {
 
             <View style={styles.inputsContainer}>
               <TextComp text="SELECT_WORKING_DAYS" style={styles.inputLabel} />
-              <View style={[styles.inputContainer, styles.pickerContainer]}>
-                <Picker
-                  selectedValue=""
-                  onValueChange={handleWorkingDaysChange}
-                  style={styles.picker}
-                  mode="dropdown"
-                >
-                  <Picker.Item label={t("SELECT_WORKING_DAYS")} value="" />
-                  {WEEK_DAYS.map((day) => (
-                    <Picker.Item 
-                      key={day} 
-                      label={t(day)} 
-                      value={day}
-                      color={formData.workingDays.includes(day) ? commonColors.primary : commonColors.gray500}
-                    />
-                  ))}
-                </Picker>
-              </View>
-              <View style={styles.selectedDaysContainer}>
+              <CustomPicker
+                value={formData.workingDays}
+                onValueChange={(value) => setFormData({ ...formData, workingDays: value as string[] })}
+                items={WEEK_DAYS.map(day => ({
+                  label: t(day),
+                  value: day,
+                  color: formData.workingDays.includes(day) ? commonColors.primary : commonColors.gray500
+                }))}
+                placeholder="SELECT_WORKING_DAYS"
+                containerStyle={styles.inputContainer}
+                multiple
+              />
+              {/* <View style={styles.selectedDaysContainer}>
                 {formData.workingDays.map((day) => (
                   <View key={day} style={styles.selectedDayTag}>
-                    <TextComp text={day} style={styles.selectedDayText} />
+                    <TextComp text={t(day)} style={styles.selectedDayText} />
                     <TouchableOpacity
-                      onPress={() => handleWorkingDaysChange(day)}
+                      onPress={() => setFormData(prev => ({
+                        ...prev,
+                        workingDays: prev.workingDays.filter(d => d !== day)
+                      }))}
                       style={styles.removeDayButton}
                     >
                       <Ionicons name="close-circle" size={16} color={commonColors.error} />
                     </TouchableOpacity>
                   </View>
                 ))}
-              </View>
+              </View> */}
             </View>
 
             <View style={styles.inputsContainer}>
@@ -349,7 +337,7 @@ const AddGreenspaceScreen = () => {
               <TextComp text="TYPE" style={styles.inputLabel} />
               <CustomPicker
                 value={formData.type}
-                onValueChange={(value) => setFormData({ ...formData, type: value })}
+                onValueChange={(value) => setFormData({ ...formData, type: value as string })}
                 items={GREENSPACE_TYPES}
                 placeholder="SELECT_TYPE"
                 containerStyle={styles.inputContainer}

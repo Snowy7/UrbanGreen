@@ -7,13 +7,14 @@ import { moderateScale } from '@/styles/scaling';
 import useIsRTL from '@/hooks/useIsRTL';
 
 interface CustomPickerProps {
-  value: string;
-  onValueChange: (value: string) => void;
-  items: Array<{ label: string; value: string }>;
+  value: string | string[];
+  onValueChange: (value: string | string[]) => void;
+  items: Array<{ label: string; value: string; color?: string }>;
   placeholder?: string;
   style?: any;
   containerStyle?: any;
   disabled?: boolean;
+  multiple?: boolean;
 }
 
 const CustomPicker: React.FC<CustomPickerProps> = ({
@@ -24,42 +25,70 @@ const CustomPicker: React.FC<CustomPickerProps> = ({
   style,
   containerStyle,
   disabled = false,
+  multiple = false,
 }) => {
   const { theme } = useTheme();
   const colors = Colors[theme];
   const isRTL = useIsRTL();
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedValues, setSelectedValues] = useState<string[]>(multiple ? (value as string[]) : []);
 
-  const selectedItem = items.find(item => item.value === value);
+  const selectedItems = multiple 
+    ? items.filter(item => (value as string[]).includes(item.value))
+    : [items.find(item => item.value === value)];
 
   const handleSelect = (item: { label: string; value: string }) => {
-    onValueChange(item.value);
+    if (multiple) {
+      const newValues = selectedValues.includes(item.value)
+        ? selectedValues.filter(v => v !== item.value)
+        : [...selectedValues, item.value];
+      setSelectedValues(newValues);
+    } else {
+      onValueChange(item.value);
+      setModalVisible(false);
+    }
+  };
+
+  const handleDone = () => {
+    onValueChange(selectedValues);
     setModalVisible(false);
   };
 
-  const renderItem = ({ item }: { item: { label: string; value: string } }) => (
-    <TouchableOpacity
-      style={[
-        styles.item,
-        {
-          backgroundColor: item.value === value ? commonColors.primary + '20' : colors.background,
-          borderBottomColor: colors.inputBorder,
-        },
-      ]}
-      onPress={() => handleSelect(item)}
-    >
-      <TextComp
-        text={item.label}
+  const renderItem = ({ item }: { item: { label: string; value: string; color?: string } }) => {
+    const isSelected = multiple 
+      ? selectedValues.includes(item.value)
+      : item.value === value;
+
+    return (
+      <TouchableOpacity
         style={[
-          styles.itemText,
+          styles.item,
           {
-            color: item.value === value ? commonColors.primary : colors.text,
-            textAlign: isRTL ? 'right' : 'left',
+            backgroundColor: isSelected ? commonColors.primary + '20' : colors.background,
+            borderBottomColor: colors.inputBorder,
           },
         ]}
-      />
-    </TouchableOpacity>
-  );
+        onPress={() => handleSelect(item)}
+      >
+        <TextComp
+          text={item.label}
+          style={[
+            styles.itemText,
+            {
+              color: isSelected ? commonColors.primary : (item.color || colors.text),
+              textAlign: isRTL ? 'right' : 'left',
+            },
+          ]}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const displayText = multiple
+    ? selectedItems.length > 0
+      ? `${selectedItems.length} items selected`
+      : placeholder
+    : selectedItems[0]?.label || placeholder;
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -76,11 +105,11 @@ const CustomPicker: React.FC<CustomPickerProps> = ({
         disabled={disabled}
       >
         <TextComp
-          text={selectedItem?.label || placeholder}
+          text={displayText}
           style={[
             styles.pickerText,
             {
-              color: selectedItem ? colors.text : colors.textSecondary,
+              color: selectedItems.length > 0 ? colors.text : colors.textSecondary,
               textAlign: isRTL ? 'right' : 'left',
             },
           ]}
@@ -125,18 +154,31 @@ const CustomPicker: React.FC<CustomPickerProps> = ({
           >
             <View style={styles.modalHeader}>
               <TextComp
-                text="SELECT_OPTION"
+                text={multiple ? "SELECT_OPTIONS" : "SELECT_OPTION"}
                 style={[styles.modalTitle, { color: colors.text }]}
               />
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={styles.closeButton}
-              >
-                <TextComp
-                  text="CLOSE"
-                  style={[styles.closeButtonText, { color: commonColors.primary }]}
-                />
-              </TouchableOpacity>
+              <View style={styles.headerButtons}>
+                {multiple && (
+                  <TouchableOpacity
+                    onPress={handleDone}
+                    style={styles.doneButton}
+                  >
+                    <TextComp
+                      text="DONE"
+                      style={[styles.doneButtonText, { color: commonColors.primary }]}
+                    />
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  onPress={() => setModalVisible(false)}
+                  style={styles.closeButton}
+                >
+                  <TextComp
+                    text="CLOSE"
+                    style={[styles.closeButtonText, { color: commonColors.primary }]}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
             <FlatList
               data={items}
@@ -190,6 +232,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
   },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: moderateScale(16),
+  },
   modalTitle: {
     fontSize: moderateScale(18),
     fontWeight: '600',
@@ -199,6 +245,13 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: moderateScale(16),
+  },
+  doneButton: {
+    padding: moderateScale(8),
+  },
+  doneButtonText: {
+    fontSize: moderateScale(16),
+    fontWeight: '600',
   },
   list: {
     maxHeight: moderateScale(400),

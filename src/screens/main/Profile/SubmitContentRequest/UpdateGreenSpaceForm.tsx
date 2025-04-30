@@ -20,6 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useGreenSpaces } from "@/hooks/useGreenSpaces";
 import useIsRTL from "@/hooks/useIsRTL";
+import CustomPicker from "@/components/CustomPicker";
 
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, 'UpdateGreenSpaceForm'>;
 type UpdateGreenSpaceFormParams = {
@@ -403,30 +404,29 @@ const UpdateGreenSpaceForm = () => {
 
             <View style={styles.inputsContainer}>
               <TextComp text="Working Days" style={styles.inputLabel} />
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue=""
-                  onValueChange={handleWorkingDaysChange}
-                  style={styles.picker}
-                  mode="dropdown"
-                >
-                  <Picker.Item label={t("SELECT_WORKING_DAYS")} value="" />
-                  {WEEK_DAYS.map((day) => (
-                    <Picker.Item 
-                      key={day} 
-                      label={t(day)} 
-                      value={day}
-                      color={formData.workingDays.includes(day) ? commonColors.primary : colors.buttonSecondary}
-                    />
-                  ))}
-                </Picker>
-              </View>
+              <CustomPicker
+                value={formData.workingDays}
+                onValueChange={(value) => {
+                  setFormData({ ...formData, workingDays: value as string[] });
+                }}
+                items={WEEK_DAYS.map(day => ({
+                  label: t(day),
+                  value: day,
+                  color: formData.workingDays.includes(day) ? commonColors.primary : colors.buttonSecondary
+                }))}
+                placeholder="SELECT_WORKING_DAYS"
+                containerStyle={[styles.inputContainer, styles.inputError]}
+                multiple
+              />
               <View style={styles.selectedDaysContainer}>
                 {formData.workingDays.map((day) => (
                   <View key={day} style={styles.selectedDayTag}>
                     <TextComp text={t(day)} style={styles.selectedDayText} />
                     <TouchableOpacity
-                      onPress={() => handleWorkingDaysChange(day)}
+                      onPress={() => setFormData(prev => ({
+                        ...prev,
+                        workingDays: prev.workingDays.filter(d => d !== day)
+                      }))}
                       style={styles.removeDayButton}
                     >
                       <Ionicons name="close-circle" size={16} color={commonColors.error} />
@@ -633,9 +633,9 @@ const useRTLStyles = (isRTL: boolean, theme: "light" | "dark") => {
       gap: moderateScale(8),
     },
     imageWrapper: {
-      position: "relative",
       width: moderateScale(100),
       height: moderateScale(100),
+      position: "relative",
     },
     thumbnail: {
       width: "100%",
@@ -678,6 +678,14 @@ const useRTLStyles = (isRTL: boolean, theme: "light" | "dark") => {
       fontSize: moderateScale(16),
       color: colors.text,
       textAlign: "center",
+    },
+    inputError: {
+      borderColor: commonColors.error,
+    },
+    errorText: {
+      color: commonColors.error,
+      fontSize: moderateScale(12),
+      marginTop: verticalScale(4),
     },
   });
 };

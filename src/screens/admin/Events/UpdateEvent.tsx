@@ -20,11 +20,10 @@ import { useGreenSpaces } from "@/hooks/useGreenSpaces";
 type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "UpdateEvent">;
 
 const EVENT_CATEGORIES = [
-  { label: "Environmental Volunteer Activity", value: "Environmental Volunteer Activity" },
-  { label: "Educational Workshop", value: "Educational Workshop" },
-  { label: "Community Gathering", value: "Community Gathering" },
-  { label: "Nature Walk", value: "Nature Walk" },
-  { label: "Gardening Workshop", value: "Gardening Workshop" },
+  { label: "ENVIRONMENTAL_VOLUNTEER_ACTIVITY", value: "ENVIRONMENTAL_VOLUNTEER_ACTIVITY" },
+  { label: "ENVIRONMENTAL_AWARENESS_EVENT", value: "ENVIRONMENTAL_AWARENESS_EVENT" },
+  { label: "SOCIAL_EVENT", value: "SOCIAL_EVENT" },
+  { label: "SPORT_ACTIVITY", value: "SPORT_ACTIVITY" }
 ];
 
 const UpdateEventScreen = () => {
@@ -142,7 +141,7 @@ const UpdateEventScreen = () => {
               <TextComp text="Event Category" style={styles.inputLabel} />
               <CustomPicker
                 value={formData.category}
-                onValueChange={(value) => setFormData({ ...formData, category: value })}
+                onValueChange={(value) => setFormData({ ...formData, category: value as string })}
                 items={EVENT_CATEGORIES}
                 placeholder="SELECT_CATEGORY"
                 containerStyle={styles.inputContainer}
@@ -257,7 +256,7 @@ const UpdateEventScreen = () => {
               <TextComp text="LOCATION" style={styles.inputLabel} />
               <CustomPicker
                 value={formData.location}
-                onValueChange={(value) => setFormData({ ...formData, location: value })}
+                onValueChange={(value) => setFormData({ ...formData, location: value as string })}
                 items={greenSpaces?.map(space => ({
                   label: space.name,
                   value: space._id

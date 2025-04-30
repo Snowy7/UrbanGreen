@@ -19,15 +19,15 @@ import { useGreenSpaces } from "@/hooks/useGreenSpaces";
 import useIsRTL from "@/hooks/useIsRTL";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
+import CustomPicker from "@/components/CustomPicker";
 
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, "AddEventForm">;
 
 const EVENT_CATEGORIES = [
-  "Environmental Volunteer Activity",
-  "Educational Workshop",
-  "Community Gathering",
-  "Nature Walk",
-  "Gardening Workshop",
+  "ENVIRONMENTAL_VOLUNTEER_ACTIVITY",
+  "ENVIRONMENTAL_AWARENESS_EVENT",
+  "SOCIAL_EVENT",
+  "SPORT_ACTIVITY"
 ];
 
 const AddEventForm = () => {
@@ -211,20 +211,19 @@ const AddEventForm = () => {
 
             <View style={styles.inputsContainer}>
               <TextComp text="Category" style={styles.inputLabel} />
-              <View style={[styles.pickerContainer, errors.category ? styles.inputError : null]}>
-                <Picker
-                  selectedValue={formData.category}
-                  onValueChange={(value) => {
-                    setFormData({ ...formData, category: value });
-                    setErrors({ ...errors, category: "" });
-                  }}
-                  style={styles.picker}
-                >
-                  {EVENT_CATEGORIES.map((category) => (
-                    <Picker.Item key={category} label={t(category)} value={category} />
-                  ))}
-                </Picker>
-              </View>
+              <CustomPicker
+                value={formData.category}
+                onValueChange={(value) => {
+                  setFormData({ ...formData, category: value as string });
+                  setErrors({ ...errors, category: "" });
+                }}
+                items={EVENT_CATEGORIES.map(category => ({
+                  label: t(category),
+                  value: category
+                }))}
+                placeholder="SELECT_CATEGORY"
+                containerStyle={[styles.inputContainer, errors.category ? styles.inputError : null]}
+              />
               {errors.category ? <TextComp text={errors.category} style={styles.errorText} /> : null}
             </View>
 
@@ -335,21 +334,22 @@ const AddEventForm = () => {
 
             <View style={styles.inputsContainer}>
               <TextComp text="Location" style={styles.inputLabel} />
-              <View style={[styles.pickerContainer, errors.location ? styles.inputError : null]}>
-                <Picker
-                  selectedValue={formData.location}
-                  onValueChange={(value) => {
-                    setFormData({ ...formData, location: value });
-                    setErrors({ ...errors, location: "" });
-                  }}
-                  style={styles.picker}
-                >
-                  <Picker.Item label="Select a location" value="" />
-                  {greenSpaces?.map((space) => (
-                    <Picker.Item key={space._id} label={space.name} value={space._id} />
-                  ))}
-                </Picker>
-              </View>
+              <CustomPicker
+                value={formData.location}
+                onValueChange={(value) => {
+                  setFormData({ ...formData, location: value as string });
+                  setErrors({ ...errors, location: "" });
+                }}
+                items={[
+                  { label: "Select a location", value: "" },
+                  ...(greenSpaces?.map(space => ({
+                    label: space.name,
+                    value: space._id
+                  })) || [])
+                ]}
+                placeholder="SELECT_LOCATION"
+                containerStyle={[styles.inputContainer, errors.location ? styles.inputError : null]}
+              />
               {errors.location ? <TextComp text={errors.location} style={styles.errorText} /> : null}
             </View>
 

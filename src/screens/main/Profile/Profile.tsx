@@ -92,6 +92,7 @@ const Profile = () => {
         onConfirm={handleLogout}
         title="Logout Confirmation"
         message="Are you sure you want to logout?"
+        buttonText="LOGOUT"
       />
     </View>
   );

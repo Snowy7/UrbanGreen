@@ -12,6 +12,7 @@ interface DeleteConfirmationModalProps {
   title: string;
   message: string;
   isLoading?: boolean;
+  buttonText?: string;
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -21,6 +22,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   title,
   message,
   isLoading = false,
+  buttonText = "DELETE",
 }) => {
   return (
     <Modal
@@ -42,11 +44,11 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
               <TextComp text="CANCEL" style={styles.cancelButtonText} />
             </TouchableOpacity>
             <ButtonComp
-              title="DELETE"
+              title={buttonText}
               onPress={onConfirm}
               isLoading={isLoading}
               style={styles.deleteButton}
-              variant="danger"
+              variant="primary"
             />
           </View>
         </View>

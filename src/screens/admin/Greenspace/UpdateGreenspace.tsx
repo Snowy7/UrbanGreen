@@ -310,25 +310,26 @@ const UpdateGreenspaceScreen = () => {
             <View style={styles.inputsContainer}>
               <TextComp text="SELECT_WORKING_DAYS" style={styles.inputLabel} />
               <CustomPicker
-                value=""
-                onValueChange={handleWorkingDaysChange}
-                items={[
-                  { label: t("SELECT_WORKING_DAYS"), value: "" },
-                  ...WEEK_DAYS.map(day => ({
-                    label: t(day),
-                    value: day,
-                    color: formData.workingDays.includes(day) ? commonColors.primary : commonColors.gray500
-                  }))
-                ]}
+                value={formData.workingDays}
+                onValueChange={(value) => setFormData({ ...formData, workingDays: value as string[] })}
+                items={WEEK_DAYS.map(day => ({
+                  label: t(day),
+                  value: day,
+                  color: formData.workingDays.includes(day) ? commonColors.primary : commonColors.gray500
+                }))}
                 placeholder="SELECT_WORKING_DAYS"
                 containerStyle={styles.inputContainer}
+                multiple
               />
               <View style={styles.selectedDaysContainer}>
                 {formData.workingDays.map((day) => (
                   <View key={day} style={styles.selectedDayTag}>
-                    <TextComp text={day} style={styles.selectedDayText} />
+                    <TextComp text={t(day)} style={styles.selectedDayText} />
                     <TouchableOpacity
-                      onPress={() => handleWorkingDaysChange(day)}
+                      onPress={() => setFormData(prev => ({
+                        ...prev,
+                        workingDays: prev.workingDays.filter(d => d !== day)
+                      }))}
                       style={styles.removeDayButton}
                     >
                       <Ionicons name="close-circle" size={16} color={commonColors.error} />
@@ -381,7 +382,7 @@ const UpdateGreenspaceScreen = () => {
               <TextComp text="TYPE" style={styles.inputLabel} />
               <CustomPicker
                 value={formData.type}
-                onValueChange={(value) => setFormData({ ...formData, type: value })}
+                onValueChange={(value) => setFormData({ ...formData, type: value as string })}
                 items={GREENSPACE_TYPES}
                 placeholder="SELECT_TYPE"
                 containerStyle={styles.inputContainer}
