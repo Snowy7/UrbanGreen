@@ -110,10 +110,17 @@ const AddEventScreen = () => {
                 <Picker
                   selectedValue={formData.category}
                   onValueChange={(value) => setFormData({ ...formData, category: value })}
-                  style={styles.picker}
+                  style={[styles.picker, { height: moderateScale(50) }]}
+                  itemStyle={{ height: moderateScale(50) }}
+                  mode="dropdown"
                 >
                   {EVENT_CATEGORIES.map((category) => (
-                    <Picker.Item key={category} label={category} value={category} />
+                    <Picker.Item 
+                      key={category} 
+                      label={category} 
+                      value={category}
+                      color={colors.text}
+                    />
                   ))}
                 </Picker>
               </View>
@@ -220,10 +227,17 @@ const AddEventScreen = () => {
                 <Picker
                   selectedValue={formData.location}
                   onValueChange={(value) => setFormData({ ...formData, location: value })}
-                  style={styles.picker}
+                  style={[styles.picker, { height: moderateScale(50) }]}
+                  itemStyle={{ height: moderateScale(50) }}
+                  mode="dropdown"
                 >
                   {greenSpaces?.map((space) => (
-                    <Picker.Item key={space._id} label={space.name} value={space._id} />
+                    <Picker.Item 
+                      key={space._id} 
+                      label={space.name} 
+                      value={space._id}
+                      color={colors.text}
+                    />
                   ))}
                 </Picker>
               </View>
