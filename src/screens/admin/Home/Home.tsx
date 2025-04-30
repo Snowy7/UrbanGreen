@@ -94,7 +94,7 @@ const Home = () => {
               />
               <TextComp text="View Pending Requests" style={styles.cardTitle} />
             </TouchableOpacity>
-            <TouchableOpacity 
+            {/* <TouchableOpacity 
               style={styles.card}
               onPress={() => navigation.navigate("Notifications")}
             >
@@ -104,7 +104,7 @@ const Home = () => {
                 height={moderateScale(30)}
               />
               <TextComp text="Send Notifications" style={styles.cardTitle} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </View>
