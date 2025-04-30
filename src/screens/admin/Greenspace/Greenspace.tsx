@@ -85,7 +85,7 @@ const GreenspaceScreen = () => {
             style={styles.heroGradient}
           />
           <View style={styles.heroTextContainer}>
-            <TextComp text={`Manage Greenspaces`} style={styles.heroText} />
+            <TextComp text={`Manage Green spaces`} style={styles.heroText} />
           </View>
         </View>
 

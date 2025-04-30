@@ -192,7 +192,7 @@ const RequestDetails = () => {
             {isGreenSpace && (
               <>
                 <View style={styles.section}>
-                  <TextComp text="Greenspace Details" style={styles.sectionTitle} />
+                  <TextComp text="Green space Details" style={styles.sectionTitle} />
                   <View style={styles.detailItem}>
                     <Ionicons name="business-outline" size={16} color={commonColors.primary} />
                     <TextComp text={request.greenSpaceName} style={[styles.detailText, { color: colors.textSecondary }]} />

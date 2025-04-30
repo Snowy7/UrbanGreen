@@ -89,7 +89,7 @@ const RequestDetailsModal = ({ visible, onClose, request, onApprove, onReject }:
             {isGreenSpace && (
               <>
                 <View style={styles.section}>
-                  <TextComp text="Greenspace Details" style={[styles.sectionTitle, { color: colors.text }]} />
+                  <TextComp text="Green space Details" style={[styles.sectionTitle, { color: colors.text }]} />
                   <View style={styles.detailItem}>
                     <Ionicons name="business-outline" size={20} color={commonColors.primary} />
                     <TextComp text={request.greenSpaceName} style={[styles.detailText, { color: colors.textSecondary }]} />

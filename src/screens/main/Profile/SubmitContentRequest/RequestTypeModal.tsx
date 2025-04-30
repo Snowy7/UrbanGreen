@@ -51,8 +51,8 @@ const RequestTypeModal = ({ visible, onClose, onContinue }: RequestTypeModalProp
                 style={styles.picker}
               >
                 <Picker.Item label="Add Event" value="Add Event" />
-                <Picker.Item label="Add Greenspace" value="Add Greenspace" />
-                <Picker.Item label="Update Greenspace" value="Update Greenspace" />
+                <Picker.Item label="Add Green space" value="Add Greenspace" />
+                <Picker.Item label="Update Green space" value="Update Greenspace" />
               </Picker>
             </View>
 
