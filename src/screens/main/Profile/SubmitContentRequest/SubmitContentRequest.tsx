@@ -12,6 +12,7 @@ import { MainStackParamList } from "@/navigation/types";
 import { Picker } from "@react-native-picker/picker";
 import ButtonComp from "@/components/ButtonComp";
 import { Image } from "react-native";
+import CustomPicker from "@/components/CustomPicker";
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, "SubmitContentRequest">;
 
 const REQUEST_TYPES = ["Add Event", "Add Greenspace", "Update Greenspace"];
@@ -66,16 +67,16 @@ const SubmitContentRequest = () => {
           <View style={styles.inputContainer}>
             <TextComp text="Select Request Type" style={styles.label} />
             <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={selectedType}
-                onValueChange={(value) => setSelectedType(value)}
-                style={styles.picker}
-              >
-                <Picker.Item label="Select a request type" value="" />
-                {REQUEST_TYPES.map((type) => (
-                  <Picker.Item key={type} label={type} value={type} />
-                ))}
-              </Picker>
+              <CustomPicker
+                value={selectedType}
+                onValueChange={(value) => setSelectedType(value as string)}
+                items={[
+                  { label: "Select a request type", value: "" },
+                  ...REQUEST_TYPES.map(type => ({ label: type, value: type }))
+                ]}
+                placeholder="SELECT_REQUEST_TYPE"
+                containerStyle={styles.picker}
+              />
             </View>
           </View>
 
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     paddingBottom: verticalScale(60),
+    paddingHorizontal: moderateScale(20),
   },
   heroImageContainer: {
     height: "80%",

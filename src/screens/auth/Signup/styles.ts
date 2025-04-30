@@ -128,6 +128,18 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
       backgroundColor: "#ffffff55",
       borderRadius: moderateScale(100),
     },
+    errorContainer: {
+      backgroundColor: commonColors.error + '20',
+      padding: moderateScale(12),
+      borderRadius: moderateScale(6),
+      marginBottom: verticalScale(16),
+    },
+    errorText: {
+      color: commonColors.error,
+      fontFamily: fontFamily.regular,
+      fontSize: moderateScale(14),
+      textAlign: 'center',
+    },
   }), [isRTL, theme, colors]);
 };
 

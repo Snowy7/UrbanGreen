@@ -8,6 +8,7 @@ import ButtonComp from "@/components/ButtonComp";
 import { LinearGradient } from "expo-linear-gradient";
 import { BackArrowIcon } from "@/assets/icons";
 import { Picker } from "@react-native-picker/picker";
+import CustomPicker from "@/components/CustomPicker";
 
 type RequestType = "Add Event" | "Add Greenspace" | "Update Greenspace";
 
@@ -45,15 +46,17 @@ const RequestTypeModal = ({ visible, onClose, onContinue }: RequestTypeModalProp
           <View style={styles.whiteBoard}>
             <TextComp text="Select Request Type" style={styles.sectionTitle} />
             <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={selectedType}
+              <CustomPicker
+                value={selectedType}
                 onValueChange={(value) => setSelectedType(value as RequestType)}
-                style={styles.picker}
-              >
-                <Picker.Item label="Add Event" value="Add Event" />
-                <Picker.Item label="Add Green space" value="Add Greenspace" />
-                <Picker.Item label="Update Green space" value="Update Greenspace" />
-              </Picker>
+                items={[
+                  { label: "Add Event", value: "Add Event" },
+                  { label: "Add Green space", value: "Add Greenspace" },
+                  { label: "Update Green space", value: "Update Greenspace" }
+                ]}
+                placeholder="SELECT_REQUEST_TYPE"
+                containerStyle={styles.picker}
+              />
             </View>
 
             <ButtonComp title="Continue" onPress={handleContinue} style={styles.continueButton} />

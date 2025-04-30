@@ -35,6 +35,7 @@ const Signup = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const phoneInput = useRef<PhoneInput>(null);
 
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -42,10 +43,11 @@ const Signup = () => {
   const handleSignup = async () => {
     if (!isLoaded || loading) return;
     setLoading(true);
+    setError("");
 
     try {
       console.log("signup", firstName, lastName, email, phone, password);
-      const resource =await signUp.create({
+      const resource = await signUp.create({
         emailAddress: email,
         password,
         firstName: firstName,
@@ -56,7 +58,8 @@ const Signup = () => {
       // skip verification for now and activate user
       await setActive({ session: resource.createdSessionId });
     } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
+      setError(err.message);
+      // console.error(JSON.stringify(err, null, 2));
     } finally {
       setLoading(false);
     }
@@ -91,6 +94,11 @@ const Signup = () => {
               <TextComp text="SIGN_UP_TO_GET_STARTED" style={styles.subtitleText} />
             </View>
             <View style={styles.whiteBoard}>
+              {error && (
+                <View style={styles.errorContainer}>
+                  <TextComp text={error} style={styles.errorText} />
+                </View>
+              )}
               <View style={styles.horizontalInputs}>
                 <View style={styles.horizontalInputsContainer}>
                   <TextComp text="FIRST_NAME" style={styles.inputLabel} />

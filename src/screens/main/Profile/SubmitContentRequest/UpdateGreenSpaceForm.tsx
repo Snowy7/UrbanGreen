@@ -265,21 +265,16 @@ const UpdateGreenSpaceForm = () => {
             <View style={styles.inputsContainer}>
               <TextComp text="Select Green space" style={styles.inputLabel} />
               <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={selectedGreenSpaceId}
-                  onValueChange={(value) => setSelectedGreenSpaceId(value)}
-                  style={styles.picker}
-                >
-                  <Picker.Item label="Select a green space" value="" />
-                  {greenSpaces?.map((space) => (
-                    <Picker.Item 
-                      key={space._id} 
-                      label={space.name} 
-                      value={space._id}
-                      color={colors.text}
-                    />
-                  ))}
-                </Picker>
+                <CustomPicker
+                  value={selectedGreenSpaceId}
+                  onValueChange={(value) => setSelectedGreenSpaceId(value as string)}
+                  items={[
+                    { label: "Select a green space", value: "" },
+                    ...greenSpaces.map(space => ({ label: space.name, value: space._id }))
+                  ]}
+                  placeholder="SELECT_GREEN_SPACE"
+                  containerStyle={styles.picker}
+                />
               </View>
             </View>
 
