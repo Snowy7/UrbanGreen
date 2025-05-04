@@ -66,7 +66,7 @@ const RequestDetails = () => {
       } else if (request.type === 'Update Green Space') {
         if (!request._id) return;
         await updateGreenSpace({
-          id: request._id,
+          id: request.greenSpaceId,
           name: request.greenSpaceName,
           entryPrice: request.entryPrice,
           plantInfo: request.plantInfo,

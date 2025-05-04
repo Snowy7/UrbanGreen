@@ -84,6 +84,7 @@ export const create = mutation({
       });
     } else if (args.type === "Update Green Space") {
       Object.assign(contentRequestData, {
+        greenSpaceId: descriptionData.greenSpaceId,
         greenSpaceName: descriptionData.name,
         entryPrice: descriptionData.entryPrice,
         plantInfo: descriptionData.plantInfo,

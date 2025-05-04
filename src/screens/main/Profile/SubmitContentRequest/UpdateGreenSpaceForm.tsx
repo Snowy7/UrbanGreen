@@ -234,13 +234,13 @@ const UpdateGreenSpaceForm = () => {
 
       const description = JSON.stringify({
         greenSpaceId: selectedGreenSpaceId,
-        greenSpaceName: formData.name,
+        name: formData.name,
         entryPrice: Number(formData.entryPrice),
         plantInfo: formData.plantInfo,
         workingTime: `${formatTime(formData.openTime)} - ${formatTime(formData.closeTime)}`,
         workingDays: formData.workingDays.join(","),
-        greenSpaceDescription: formData.description,
-        greenSpaceLocation: formData.location,
+        description: formData.description,
+        location: formData.location,
         facilities: formData.facilities,
         images: imageUrls,
       });

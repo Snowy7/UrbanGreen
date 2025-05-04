@@ -52,6 +52,7 @@ export const ContentRequest = v.object({
   updatedAt: v.string(),
 
   // Event fields
+  eventId: v.optional(v.id("events")),
   name: v.optional(v.string()),
   category: v.optional(v.string()),
   date: v.optional(v.string()),
@@ -61,6 +62,7 @@ export const ContentRequest = v.object({
   eventLocation: v.optional(v.string()),
 
   // Green Space fields
+  greenSpaceId: v.optional(v.id("greenSpaces")),
   greenSpaceName: v.optional(v.string()),
   entryPrice: v.optional(v.number()),
   plantInfo: v.optional(v.string()),

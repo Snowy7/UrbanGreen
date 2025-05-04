@@ -85,7 +85,7 @@ const ContentRequests = () => {
       >
         <View style={styles.requestHeader}>
           <TextComp
-            text={item.greenSpaceName || item.title || "Untitled Request"}
+            text={item.greenSpaceName || item.title || item.name || "Untitled Request"}
             style={[styles.requestTitle, { color: colors.text }]}
           />
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
