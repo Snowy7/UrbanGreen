@@ -106,16 +106,15 @@ export const GreenspaceCard: React.FC<GreenspaceCardProps> = ({
             </View>
           </View>
 
-          <TouchableOpacity 
-            style={styles.favoriteButton} 
-            onPress={handleToggleFavorite}
-          >
+          {!userProfile?.isAdmin && (
+            <TouchableOpacity style={styles.favoriteButton} onPress={handleToggleFavorite}>
             <HeartIcon
               color={isFavorited ? commonColors.primary : commonColors.white}
               width={moderateScale(24)}
               height={moderateScale(24)}
-            />
-          </TouchableOpacity>
+              />
+            </TouchableOpacity>
+          )}
         </TouchableOpacity>
       </View>
     </View>
