@@ -22,20 +22,12 @@ import { useGreenSpaces } from "@/hooks/useGreenSpaces";
 import useIsRTL from "@/hooks/useIsRTL";
 import CustomPicker from "@/components/CustomPicker";
 
-type NavigationProp = NativeStackNavigationProp<MainStackParamList, 'UpdateGreenSpaceForm'>;
+type NavigationProp = NativeStackNavigationProp<MainStackParamList, "UpdateGreenSpaceForm">;
 type UpdateGreenSpaceFormParams = {
   greenSpaceId: string;
 };
 
-const WEEK_DAYS = [
-  "MONDAY",
-  "TUESDAY",
-  "WEDNESDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
-  "SUNDAY",
-];
+const WEEK_DAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
 
 interface FormData {
   name: string;
@@ -91,25 +83,35 @@ const UpdateGreenSpaceForm = () => {
     }
   }, [greenSpaces]);
 
+  const processWorkingTime = (workingTime: string) => {
+    // workingTime 08:00 AM - 11:00 PM
+    const [openTime, closeTime] = workingTime.split(" - ");
+    const openTimeDate = new Date(`1970-01-01T${openTime}`);
+    const closeTimeDate = new Date(`1970-01-01T${closeTime}`);
+    return { openTime: openTimeDate, closeTime: closeTimeDate };
+  };
+
   const loadGreenspaceData = async () => {
     try {
       if (!selectedGreenSpaceId) {
         console.error("No green space ID provided");
         return;
       }
-      const greenSpace = greenSpaces.find(gs => gs._id === selectedGreenSpaceId);
+      const greenSpace = greenSpaces.find((gs) => gs._id === selectedGreenSpaceId);
       if (greenSpace) {
-        const existingImages = greenSpace.images.map(url => ({
+        const existingImages = greenSpace.images.map((url) => ({
           uri: url,
           mimeType: url.endsWith(".png") ? "image/png" : "image/jpeg",
         })) as ImagePicker.ImagePickerAsset[];
+
+        const { openTime, closeTime } = processWorkingTime(greenSpace.workingTime);
 
         setFormData({
           name: greenSpace.name,
           entryPrice: greenSpace.entryPrice.toString(),
           plantInfo: greenSpace.plantInfo,
-          openTime: new Date(`2000-01-01T${greenSpace.workingTime.split(" - ")[0]}`),
-          closeTime: new Date(`2000-01-01T${greenSpace.workingTime.split(" - ")[1]}`),
+          openTime: openTime,
+          closeTime: closeTime,
           workingDays: greenSpace.workingDays.split(","),
           description: greenSpace.description,
           location: greenSpace.location,
@@ -133,9 +135,9 @@ const UpdateGreenSpaceForm = () => {
   const formatTime = (date: Date) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const ampm = hours >= 12 ? "PM" : "AM";
     const formattedHours = hours % 12 || 12;
-    const formattedMinutes = minutes.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, "0");
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   };
 
@@ -150,9 +152,9 @@ const UpdateGreenSpaceForm = () => {
       });
 
       if (!result.canceled) {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          images: [...prev.images, ...result.assets]
+          images: [...prev.images, ...result.assets],
         }));
       }
     } catch (error) {
@@ -161,18 +163,19 @@ const UpdateGreenSpaceForm = () => {
   };
 
   const removeImage = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index)
+      images: prev.images.filter((_, i) => i !== index),
     }));
   };
 
   const handleWorkingDaysChange = (value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      workingDays: prev.workingDays.includes(value)
-        ? prev.workingDays.filter(day => day !== value)
-        : [...prev.workingDays, value]
+      workingDays:
+        prev.workingDays.includes(value) ?
+          prev.workingDays.filter((day) => day !== value)
+        : [...prev.workingDays, value],
     }));
   };
 
@@ -205,7 +208,7 @@ const UpdateGreenSpaceForm = () => {
       }
       setLoading(true);
       const imageUrls = await uploadImages();
-      
+
       const description = JSON.stringify({
         greenSpaceId: selectedGreenSpaceId,
         greenSpaceName: formData.name,
@@ -270,7 +273,7 @@ const UpdateGreenSpaceForm = () => {
                   onValueChange={(value) => setSelectedGreenSpaceId(value as string)}
                   items={[
                     { label: "Select a green space", value: "" },
-                    ...greenSpaces.map(space => ({ label: space.name, value: space._id }))
+                    ...greenSpaces.map((space) => ({ label: space.name, value: space._id })),
                   ]}
                   placeholder="SELECT_GREEN_SPACE"
                   containerStyle={styles.picker}
@@ -351,12 +354,23 @@ const UpdateGreenSpaceForm = () => {
               <View style={[styles.inputsContainer, { flex: 1, marginRight: moderateScale(8) }]}>
                 <TextComp text="Open Time" style={styles.inputLabel} />
                 <TouchableOpacity
-                  style={[styles.inputContainer, { height: verticalScale(40), justifyContent: 'center' }]}
+                  style={[
+                    styles.inputContainer,
+                    { height: verticalScale(40), justifyContent: "center" },
+                  ]}
                   onPress={() => setShowOpenTimePicker(true)}
                 >
                   <View style={styles.timeInputContainer}>
-                    <Ionicons name="time-outline" size={20} color={colors.buttonSecondary} style={styles.timeIcon} />
-                    <TextComp text={formatTime(formData.openTime)} style={[styles.input, { lineHeight: verticalScale(24) }]} />
+                    <Ionicons
+                      name="time-outline"
+                      size={20}
+                      color={colors.buttonSecondary}
+                      style={styles.timeIcon}
+                    />
+                    <TextComp
+                      text={formatTime(formData.openTime)}
+                      style={[styles.input, { lineHeight: verticalScale(24) }]}
+                    />
                   </View>
                 </TouchableOpacity>
                 {showOpenTimePicker && (
@@ -375,12 +389,23 @@ const UpdateGreenSpaceForm = () => {
               <View style={[styles.inputsContainer, { flex: 1, marginLeft: moderateScale(8) }]}>
                 <TextComp text="Close Time" style={styles.inputLabel} />
                 <TouchableOpacity
-                  style={[styles.inputContainer, { height: verticalScale(40), justifyContent: 'center' }]}
+                  style={[
+                    styles.inputContainer,
+                    { height: verticalScale(40), justifyContent: "center" },
+                  ]}
                   onPress={() => setShowCloseTimePicker(true)}
                 >
                   <View style={styles.timeInputContainer}>
-                    <Ionicons name="time-outline" size={20} color={colors.buttonSecondary} style={styles.timeIcon} />
-                    <TextComp text={formatTime(formData.closeTime)} style={[styles.input, { lineHeight: verticalScale(24) }]} />
+                    <Ionicons
+                      name="time-outline"
+                      size={20}
+                      color={colors.buttonSecondary}
+                      style={styles.timeIcon}
+                    />
+                    <TextComp
+                      text={formatTime(formData.closeTime)}
+                      style={[styles.input, { lineHeight: verticalScale(24) }]}
+                    />
                   </View>
                 </TouchableOpacity>
                 {showCloseTimePicker && (
@@ -404,10 +429,13 @@ const UpdateGreenSpaceForm = () => {
                 onValueChange={(value) => {
                   setFormData({ ...formData, workingDays: value as string[] });
                 }}
-                items={WEEK_DAYS.map(day => ({
+                items={WEEK_DAYS.map((day) => ({
                   label: t(day),
                   value: day,
-                  color: formData.workingDays.includes(day) ? commonColors.primary : colors.buttonSecondary
+                  color:
+                    formData.workingDays.includes(day) ?
+                      commonColors.primary
+                    : colors.buttonSecondary,
                 }))}
                 placeholder="SELECT_WORKING_DAYS"
                 containerStyle={[styles.inputContainer, styles.inputError]}
@@ -418,10 +446,12 @@ const UpdateGreenSpaceForm = () => {
                   <View key={day} style={styles.selectedDayTag}>
                     <TextComp text={t(day)} style={styles.selectedDayText} />
                     <TouchableOpacity
-                      onPress={() => setFormData(prev => ({
-                        ...prev,
-                        workingDays: prev.workingDays.filter(d => d !== day)
-                      }))}
+                      onPress={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          workingDays: prev.workingDays.filter((d) => d !== day),
+                        }))
+                      }
                       style={styles.removeDayButton}
                     >
                       <Ionicons name="close-circle" size={16} color={commonColors.error} />
@@ -480,7 +510,7 @@ const UpdateGreenSpaceForm = () => {
                     </TouchableOpacity>
                   </View>
                 ))}
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[styles.inputContainer, styles.imageUploadButton]}
                   onPress={pickImage}
                 >
@@ -685,4 +715,4 @@ const useRTLStyles = (isRTL: boolean, theme: "light" | "dark") => {
   });
 };
 
-export default UpdateGreenSpaceForm; 
+export default UpdateGreenSpaceForm;
