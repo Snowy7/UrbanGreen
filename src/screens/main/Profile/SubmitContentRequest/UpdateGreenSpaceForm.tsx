@@ -85,10 +85,33 @@ const UpdateGreenSpaceForm = () => {
 
   const processWorkingTime = (workingTime: string) => {
     // workingTime 08:00 AM - 11:00 PM
-    const [openTime, closeTime] = workingTime.split(" - ");
-    const openTimeDate = new Date(`1970-01-01T${openTime}`);
-    const closeTimeDate = new Date(`1970-01-01T${closeTime}`);
-    return { openTime: openTimeDate, closeTime: closeTimeDate };
+    const parts = workingTime.split(" - ");
+
+    const parseTime = (timePart: string): Date | null => {
+      const timeRegex = /(\d{1,2}):(\d{2})\s*(AM|PM)/i;
+      const match = timeRegex.exec(timePart);
+
+      if (!match) return null;
+
+      let hours = parseInt(match[1], 10);
+      const minutes = parseInt(match[2], 10);
+      const ampm = match[3].toUpperCase();
+
+      if (ampm === "PM" && hours !== 12) {
+        hours += 12;
+      } else if (ampm === "AM" && hours === 12) {
+        hours = 0;
+      }
+
+      const today = new Date();
+      today.setHours(hours, minutes, 0, 0);
+      return today;
+    };
+
+    const openTime = parseTime(parts[0]);
+    const closeTime = parseTime(parts[1]);
+
+    return { openTime: openTime || new Date(), closeTime: closeTime || new Date() };
   };
 
   const loadGreenspaceData = async () => {

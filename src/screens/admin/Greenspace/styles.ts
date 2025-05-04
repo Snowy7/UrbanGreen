@@ -312,7 +312,7 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
           marginBottom: verticalScale(16),
         },
         horizontalInputsContainer: {
-          flexDirection: 'row',
+          flexDirection: "row",
           marginBottom: verticalScale(16),
         },
         inputContainer: {
@@ -323,23 +323,23 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
           paddingHorizontal: moderateScale(12),
           paddingVertical: verticalScale(8),
           minHeight: verticalScale(40),
-          justifyContent: 'center',
+          justifyContent: "center",
         },
         input: {
           fontSize: moderateScale(14),
           fontFamily: fontFamily.regular,
           color: colors.text,
           minHeight: verticalScale(24),
-          width: '100%',
-          textAlignVertical: 'center',
+          width: "100%",
+          textAlignVertical: "center",
           lineHeight: verticalScale(24),
         },
         timeInput: {
-          width: '100%',
+          width: "100%",
           //center vertically
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
         },
         inputLabel: {
           fontSize: moderateScale(12),
@@ -349,7 +349,7 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
         },
         descriptionInput: {
           minHeight: verticalScale(120),
-          textAlignVertical: 'top',
+          textAlignVertical: "top",
           paddingTop: verticalScale(8),
         },
         descriptionContainer: {
@@ -358,9 +358,9 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
         imageUploadButton: {
           width: moderateScale(100),
           height: moderateScale(100),
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderStyle: 'dashed',
+          justifyContent: "center",
+          alignItems: "center",
+          borderStyle: "dashed",
           borderWidth: 1,
           borderColor: commonColors.secondary,
         },
@@ -375,22 +375,22 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
           marginBottom: verticalScale(32),
         },
         imagesContainer: {
-          flexDirection: 'row',
-          flexWrap: 'wrap',
+          flexDirection: "row",
+          flexWrap: "wrap",
           gap: moderateScale(8),
         },
         imageWrapper: {
-          position: 'relative',
+          position: "relative",
           width: moderateScale(100),
           height: moderateScale(100),
         },
         thumbnail: {
-          width: '100%',
-          height: '100%',
+          width: "100%",
+          height: "100%",
           borderRadius: moderateScale(8),
         },
         removeImageButton: {
-          position: 'absolute',
+          position: "absolute",
           top: -moderateScale(8),
           right: -moderateScale(8),
           backgroundColor: colors.surface,
@@ -399,22 +399,22 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
         pickerContainer: {
           padding: 0,
           height: verticalScale(50),
-          justifyContent: 'center',
+          justifyContent: "center",
         },
         picker: {
           height: verticalScale(50),
-          width: '100%',
+          width: "100%",
           color: colors.text,
         },
         selectedDaysContainer: {
-          flexDirection: 'row',
-          flexWrap: 'wrap',
+          flexDirection: "row",
+          flexWrap: "wrap",
           gap: moderateScale(8),
           marginTop: verticalScale(8),
         },
         selectedDayTag: {
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
           backgroundColor: commonColors.primary,
           paddingHorizontal: moderateScale(8),
           paddingVertical: moderateScale(4),
@@ -429,12 +429,34 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
           padding: moderateScale(2),
         },
         timeInputContainer: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          width: '100%',
+          flexDirection: "row",
+          alignItems: "center",
+          width: "100%",
         },
         timeIcon: {
           marginRight: moderateScale(8),
+        },
+        imagesGrid: {
+          flexDirection: "row",
+          flexWrap: "wrap",
+          gap: moderateScale(8),
+        },
+        imageItem: {
+          position: "relative",
+          width: moderateScale(100),
+          height: moderateScale(100),
+        },
+        imagePreview: {
+          width: "100%",
+          height: "100%",
+          borderRadius: moderateScale(8),
+        },
+        removeButton: {
+          position: "absolute",
+          top: -moderateScale(8),
+          right: -moderateScale(8),
+          backgroundColor: colors.surface,
+          borderRadius: moderateScale(12),
         },
       }),
     [isRTL, theme, colors]
