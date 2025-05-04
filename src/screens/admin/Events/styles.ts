@@ -54,6 +54,22 @@ const useRTLStyles = (isRTL: boolean, theme: "light" | "dark") => {
       marginTop: -moderateScale(20),
       padding: moderateScale(20),
     },
+    
+    listContainer: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+
+    emptyContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+
+    emptyText: {
+      color: colors.text,
+    },
+
     formContainer: {
       flex: 1,
     },

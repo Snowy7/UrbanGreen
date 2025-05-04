@@ -109,7 +109,7 @@ const AddEventForm = () => {
       isValid = false;
     }
 
-    if (formData.startTime >= formData.endTime) {
+    if (formData.startTime >= formData.endTime && formData.endTime.getHours() !== 0) {
       newErrors.endTime = "End time must be after start time";
       isValid = false;
     }

@@ -132,7 +132,8 @@ const AddGreenSpaceForm = () => {
       isValid = false;
     }
 
-    if (formData.openTime >= formData.closeTime) {
+    // make sure the open time is before the close time but the close time if it is 12 am it should be the next day
+    if (formData.openTime >= formData.closeTime && formData.closeTime.getHours() !== 0) {
       newErrors.closeTime = "Close time must be after open time";
       isValid = false;
     }

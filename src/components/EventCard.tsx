@@ -64,7 +64,11 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onPress, onDelete, 
         </View>
         <View style={styles.eventCardContent}>
           <TextComp text={event.name} style={styles.eventCardTitle} />
-          <TextComp text={event.description} style={styles.eventCardDescription} />
+          <TextComp
+            text={event.description}
+            style={styles.eventCardDescription}
+            numberOfLines={2}
+          />
           <View style={styles.eventCardDateContainer}>
             <CalendarIcon
               color={commonColors.primary}
@@ -83,11 +87,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onPress, onDelete, 
             />
           </View>
           <View style={styles.eventCardDateContainer}>
-            <LocationIcon
-              color={commonColors.primary}
-              width={moderateScale(15)}
-              height={moderateScale(15)}
-            />
+            <Ionicons name="location-outline" size={18} color={commonColors.primary} />
             <TextComp text={greenSpace?.name || "Loading..."} style={styles.eventCardDate} />
           </View>
         </View>
@@ -114,6 +114,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onPress, onDelete, 
 const styles = StyleSheet.create({
   eventCardContainer: {
     width: "100%",
+    height: moderateScale(180),
     backgroundColor: commonColors.white,
     borderRadius: moderateScale(10),
     shadowColor: commonColors.black,
@@ -158,6 +159,10 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(12),
     fontWeight: "medium",
     color: commonColors.gray300,
+    // max 2 lines
+    maxWidth: "100%",
+    wordWrap: "break-word",
+    textOverflow: "ellipsis",
   },
   eventCardDateContainer: {
     flexDirection: "row",
