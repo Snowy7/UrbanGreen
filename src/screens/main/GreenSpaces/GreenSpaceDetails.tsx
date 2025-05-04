@@ -118,7 +118,7 @@ const GreenSpaceDetails = () => {
               />
             </View>
 
-            {userProfile?.isAdmin && (
+            {!userProfile?.isAdmin && (
               <TouchableOpacity style={styles.mapButton} onPress={handleOpenInMap}>
                 <Ionicons name="map-outline" size={24} color={commonColors.white} />
                 <TextComp text="Open in Map" style={styles.mapButtonText} />
@@ -218,7 +218,7 @@ const GreenSpaceDetails = () => {
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <BackArrowIcon />
           </TouchableOpacity>
-          {userProfile?.isAdmin && (
+          {!userProfile?.isAdmin && (
             <TouchableOpacity
               style={styles.favoriteButton}
               onPress={handleToggleFavorite}
