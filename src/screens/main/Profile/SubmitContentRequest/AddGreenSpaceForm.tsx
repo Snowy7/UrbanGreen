@@ -195,16 +195,6 @@ const AddGreenSpaceForm = () => {
     }));
   };
 
-  const handleWorkingDaysChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      workingDays: prev.workingDays.includes(value)
-        ? prev.workingDays.filter(day => day !== value)
-        : [...prev.workingDays, value]
-    }));
-    setErrors(prev => ({ ...prev, workingDays: "" }));
-  };
-
   const uploadImages = async () => {
     const imageUrls = [];
     for (const image of formData.images) {
@@ -248,7 +238,7 @@ const AddGreenSpaceForm = () => {
       });
 
       await createContentRequest({
-        type: "Add Greenspace",
+        type: "Add Green Space",
         title: `Add green space request: ${formData.name.trim()}`,
         description,
         status: "pending",

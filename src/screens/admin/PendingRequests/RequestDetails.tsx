@@ -105,7 +105,7 @@ const RequestDetails = () => {
   }
 
   const isEvent = request.type === 'Add Event';
-  const isGreenSpace = request.type === 'Add Greenspace' || request.type === 'Update Greenspace';
+  const isGreenSpace = request.type === 'Add Green Space' || request.type === 'Update Green Space';
 
   const getHeroTitle = () => {
     if (isEvent) return request.name || '';

@@ -79,7 +79,7 @@ const PendingRequests = () => {
 
   const renderRequestItem = ({ item }: { item: ContentRequest }) => {
     const isEvent = item.type === 'Add Event';
-    const isGreenSpace = item.type === 'Add Greenspace' || item.type === 'Update Greenspace';
+    const isGreenSpace = item.type === 'Add Green Space' || item.type === 'Update Green Space';
 
     return (
       <TouchableOpacity

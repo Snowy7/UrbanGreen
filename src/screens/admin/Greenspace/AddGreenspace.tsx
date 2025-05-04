@@ -107,12 +107,13 @@ const AddGreenspaceScreen = () => {
     try {
       setLoading(true);
       const imageUrls = await uploadImages();
+      const {closeTime, openTime, ...rest} = formData;
       await createGreenSpace({
-        ...formData,
+        ...rest,
         entryPrice: Number(formData.entryPrice),
         workingDays: formData.workingDays.join(","),
         images: imageUrls,
-        workingTime: `${formatTime(formData.openTime)} - ${formatTime(formData.closeTime)}`,
+        workingTime: `${formatTime(openTime)} - ${formatTime(closeTime)}`,
       });
       navigation.goBack();
     } catch (error) {

@@ -20,6 +20,7 @@
     "expo-navigation-bar": "~4.0.9",
     "expo-secure-store": "~14.0.1",
     "expo-splash-screen": "~0.29.24",
+    "flipper-plugin": "^0.273.0",
     "i18next": "^24.2.3",
     "intl-pluralrules": "^2.0.1",
     "patch-package": "^8.0.0",
