@@ -82,6 +82,18 @@ export const create = mutation({
         facilities: descriptionData.facilities,
         images: descriptionData.images,
       });
+    } else if (args.type === "Update Green Space") {
+      Object.assign(contentRequestData, {
+        greenSpaceName: descriptionData.name,
+        entryPrice: descriptionData.entryPrice,
+        plantInfo: descriptionData.plantInfo,
+        workingTime: descriptionData.workingTime,
+        workingDays: descriptionData.workingDays,
+        greenSpaceDescription: descriptionData.description,
+        greenSpaceLocation: descriptionData.location,
+        facilities: descriptionData.facilities,
+        images: descriptionData.images,
+      });
     }
 
     const contentRequestId = await ctx.db.insert("contentRequests", contentRequestData);

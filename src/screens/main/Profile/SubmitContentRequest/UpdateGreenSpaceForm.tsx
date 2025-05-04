@@ -220,7 +220,7 @@ const UpdateGreenSpaceForm = () => {
       });
 
       await createContentRequest({
-        type: "Update Greenspace",
+        type: "Update Green Space",
         title: `Update request for ${formData.name}`,
         description,
         status: "pending",

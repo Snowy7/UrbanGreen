@@ -51,7 +51,7 @@ const RequestDetails = () => {
           description: request.eventDescription || '',
           location: request.eventLocation || '',
         });
-      } else if (request.type === 'Add Greenspace') {
+      } else if (request.type === 'Add Green Space') {
         await createGreenSpace({
           name: request.greenSpaceName || '',
           entryPrice: request.entryPrice || 0,
@@ -63,7 +63,7 @@ const RequestDetails = () => {
           facilities: request.facilities || '',
           images: request.images || [],
         });
-      } else if (request.type === 'Update Greenspace') {
+      } else if (request.type === 'Update Green Space') {
         if (!request._id) return;
         await updateGreenSpace({
           id: request._id,

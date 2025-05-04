@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  Alert,
+} from "react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { Colors, commonColors } from "@/styles/colors";
 import TextComp from "@/components/TextComp";
@@ -110,13 +118,12 @@ const GreenSpaceDetails = () => {
               />
             </View>
 
-            <TouchableOpacity 
-              style={styles.mapButton} 
-              onPress={handleOpenInMap}
-            >
-              <Ionicons name="map-outline" size={24} color={commonColors.white} />
-              <TextComp text="Open in Map" style={styles.mapButtonText} />
-            </TouchableOpacity>
+            {userProfile?.isAdmin && (
+              <TouchableOpacity style={styles.mapButton} onPress={handleOpenInMap}>
+                <Ionicons name="map-outline" size={24} color={commonColors.white} />
+                <TextComp text="Open in Map" style={styles.mapButtonText} />
+              </TouchableOpacity>
+            )}
           </View>
         );
       case "photos":
@@ -211,17 +218,19 @@ const GreenSpaceDetails = () => {
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <BackArrowIcon />
           </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.favoriteButton} 
-            onPress={handleToggleFavorite}
-            disabled={isFavoriting}
-          >
-            <HeartIcon
-              color={isFavorited ? commonColors.primary : commonColors.white}
-              width={moderateScale(24)}
-              height={moderateScale(24)}
-            />
-          </TouchableOpacity>
+          {userProfile?.isAdmin && (
+            <TouchableOpacity
+              style={styles.favoriteButton}
+              onPress={handleToggleFavorite}
+              disabled={isFavoriting}
+            >
+              <HeartIcon
+                color={isFavorited ? commonColors.primary : commonColors.white}
+                width={moderateScale(24)}
+                height={moderateScale(24)}
+              />
+            </TouchableOpacity>
+          )}
           <View style={styles.heroContent}>
             <TextComp text={greenSpace.name} style={styles.heroTitle} />
             <View style={styles.locationContainer}>
@@ -434,14 +443,14 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(100),
   },
   mapButton: {
-    position: 'absolute',
+    position: "absolute",
     bottom: verticalScale(-35),
     left: moderateScale(20),
     right: moderateScale(20),
     backgroundColor: commonColors.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     padding: moderateScale(15),
     borderRadius: moderateScale(10),
     shadowColor: commonColors.black,
@@ -456,7 +465,7 @@ const styles = StyleSheet.create({
   mapButtonText: {
     color: commonColors.white,
     fontSize: moderateScale(16),
-    fontWeight: '600',
+    fontWeight: "600",
     marginLeft: moderateScale(8),
   },
 });

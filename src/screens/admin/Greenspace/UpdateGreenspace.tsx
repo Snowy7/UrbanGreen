@@ -176,9 +176,11 @@ const UpdateGreenspaceScreen = () => {
       
       console.log(formData.openTime, formData.closeTime);
 
+      const {closeTime, openTime, ...rest} = formData;
+
       await updateGreenSpace({
         id: route.params.id as Id<"greenSpaces">,
-        ...formData,
+        ...rest,
         entryPrice: Number(formData.entryPrice),
         workingDays: formData.workingDays.join(","),
         images: imageUrls,
@@ -375,17 +377,6 @@ const UpdateGreenspaceScreen = () => {
                 style={styles.input}
                 containerStyle={styles.inputContainer}
                 placeholderTextColor={commonColors.gray200}
-              />
-            </View>
-
-            <View style={styles.inputsContainer}>
-              <TextComp text="TYPE" style={styles.inputLabel} />
-              <CustomPicker
-                value={formData.type}
-                onValueChange={(value) => setFormData({ ...formData, type: value as string })}
-                items={GREENSPACE_TYPES}
-                placeholder="SELECT_TYPE"
-                containerStyle={styles.inputContainer}
               />
             </View>
 
