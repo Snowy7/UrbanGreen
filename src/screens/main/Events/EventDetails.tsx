@@ -16,6 +16,7 @@ import ButtonComp from "@/components/ButtonComp";
 import { Id } from "convex/_generated/dataModel";
 import { useAuth } from "@clerk/clerk-expo";
 import LoadingComp from "@/components/LoadingComp";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, "EventDetails">;
 
@@ -44,6 +45,7 @@ const EventDetails = () => {
   const route = useRoute();
   const { id } = route.params as { id: string };
   const { userId } = useAuth();
+  const { userProfile } = useUserProfile();
   const [isJoining, setIsJoining] = useState(false);
 
   const event = useQuery(api.events.getById, { id: id as Id<"events"> });
@@ -114,10 +116,7 @@ const EventDetails = () => {
             <View style={styles.infoItem}>
               <Ionicons name="time-outline" size={24} color={commonColors.primary} />
               <View>
-                <TextComp
-                  text="Time"
-                  style={[styles.infoLabel, { color: colors.textSecondary }]}
-                />
+                <TextComp text="Time" style={[styles.infoLabel, { color: colors.textSecondary }]} />
                 <TextComp
                   text={`${formatTime(event.startTime)} - ${formatTime(event.endTime)}`}
                   style={[styles.infoValue, { color: colors.text }]}
@@ -148,12 +147,14 @@ const EventDetails = () => {
             />
           </View>
 
-          <ButtonComp
-            title="Join Event"
-            onPress={handleJoinEvent}
-            style={styles.joinButton}
-            isLoading={isJoining}
-          />
+          {!userProfile?.isAdmin && (
+            <ButtonComp
+              title="Join Event"
+              onPress={handleJoinEvent}
+              style={styles.joinButton}
+              isLoading={isJoining}
+            />
+          )}
         </View>
       </ScrollView>
     </View>

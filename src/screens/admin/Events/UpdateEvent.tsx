@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, ViewStyle } from "react-native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AdminStackParamList } from "@/navigation/types";
@@ -16,6 +16,9 @@ import useRTLStyles from "./styles";
 import useIsRTL from "@/hooks/useIsRTL";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useGreenSpaces } from "@/hooks/useGreenSpaces";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "convex/_generated/api";
+import { Id } from "convex/_generated/dataModel";
 
 type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "UpdateEvent">;
 
@@ -25,6 +28,23 @@ const EVENT_CATEGORIES = [
   { label: "SOCIAL_EVENT", value: "SOCIAL_EVENT" },
   { label: "SPORT_ACTIVITY", value: "SPORT_ACTIVITY" }
 ];
+
+interface FormState {
+  name: string;
+  category: string;
+  date: Date;
+  startTime: Date;
+  endTime: Date;
+  description: string;
+  location: string;
+}
+
+interface ValidationErrors {
+  name?: string;
+  description?: string;
+  location?: string;
+  time?: string;
+}
 
 const UpdateEventScreen = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -36,8 +56,15 @@ const UpdateEventScreen = () => {
   const { greenSpaces } = useGreenSpaces();
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const eventId = route.params.id;
+  
+  // Fetch event data
+  const event = useQuery(api.events.getById, { id: eventId as Id<"events"> });
+  
+  // Update mutation
+  const updateEvent = useMutation(api.events.update);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     name: "",
     category: EVENT_CATEGORIES[0].value,
     date: new Date(),
@@ -47,41 +74,99 @@ const UpdateEventScreen = () => {
     location: "",
   });
 
+  const [errors, setErrors] = useState<ValidationErrors>({});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
   useEffect(() => {
-    const loadEventData = async () => {
+    if (event) {
       try {
-        // TODO: Fetch event data from API
-        // For now, we'll use mock data
+        // Convert string dates to Date objects
+        const dateObj = new Date(event.date);
+        
+        // Parse time strings (assuming format like "10:30 AM")
+        const parseTimeString = (timeStr: string) => {
+          return new Date(timeStr);
+        };
+        
+
         setFormData({
-          name: "Sample Event",
-          category: EVENT_CATEGORIES[0].value,
-          date: new Date(),
-          startTime: new Date(),
-          endTime: new Date(),
-          description: "Sample description",
-          location: "",
+          name: event.name,
+          category: event.category,
+          date: dateObj,
+          startTime: parseTimeString(event.startTime),
+          endTime: parseTimeString(event.endTime),
+          description: event.description,
+          location: event.location,
         });
+        
+        setInitialLoading(false);
       } catch (error) {
-        console.error("Error loading event data:", error);
-      } finally {
+        console.error("Error parsing event data:", error);
         setInitialLoading(false);
       }
-    };
+    }
+  }, [event]);
 
-    loadEventData();
-  }, [route.params.id]);
+  const validateForm = (): boolean => {
+    const newErrors: ValidationErrors = {};
+    
+    // Validate name
+    if (!formData.name.trim()) {
+      newErrors.name = "EVENT_NAME_REQUIRED";
+    }
+    
+    // Validate description
+    if (!formData.description.trim()) {
+      newErrors.description = "EVENT_DESCRIPTION_REQUIRED";
+    }
+    
+    // Validate location
+    if (!formData.location) {
+      newErrors.location = "EVENT_LOCATION_REQUIRED";
+    }
+    
+    // Validate that end time is after start time
+    if (formData.endTime <= formData.startTime) {
+      newErrors.time = "END_TIME_MUST_BE_AFTER_START_TIME";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      Alert.alert("Validation Error", "Please fix the errors in the form before submitting.");
+      return;
+    }
+    
     try {
       setLoading(true);
-      // TODO: Implement event update
-      navigation.goBack();
+      
+      // Format dates for API
+      const formattedDate = formData.date.toISOString().split('T')[0];
+      
+      await updateEvent({
+        id: eventId as Id<"events">,
+        name: formData.name,
+        category: formData.category,
+        date: formattedDate,
+        startTime: formData.startTime.toISOString(),
+        endTime: formData.endTime.toISOString(),
+        description: formData.description,
+        location: formData.location,
+      });
+      
+      Alert.alert(
+        "Success",
+        "Event updated successfully",
+        [{ text: "OK", onPress: () => navigation.goBack() }]
+      );
     } catch (error) {
       console.error("Error updating event:", error);
+      Alert.alert("Error", "Failed to update event. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -103,7 +188,9 @@ const UpdateEventScreen = () => {
   if (initialLoading) {
     return (
       <View style={styles.container}>
-        <TextComp text="LOADING" style={styles.loadingText} />
+        <View style={styles.loadingContainer}>
+          <TextComp text="LOADING" style={styles.loadingText} />
+        </View>
       </View>
     );
   }
@@ -124,21 +211,40 @@ const UpdateEventScreen = () => {
         </View>
 
         <View style={styles.whiteBoard}>
-          <ScrollView style={styles.formContainer}>
+          <ScrollView 
+            style={styles.formContainer}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: verticalScale(100) }}
+          >
             <View style={styles.inputsContainer}>
               <TextComp text="EVENT_NAME" style={styles.inputLabel} />
               <TextInputComp
                 placeholder="ENTER_EVENT_NAME"
                 value={formData.name}
-                onChangeText={(text) => setFormData({ ...formData, name: text })}
+                onChangeText={(text) => {
+                  setFormData({ ...formData, name: text });
+                  if (errors.name) {
+                    setErrors({ ...errors, name: undefined });
+                  }
+                }}
                 style={styles.input}
-                containerStyle={styles.inputContainer}
+                containerStyle={
+                  errors.name 
+                    ? { ...styles.inputContainer, ...styles.inputError } 
+                    : styles.inputContainer
+                }
                 placeholderTextColor={commonColors.gray200}
               />
+              {errors.name && (
+                <TextComp 
+                  text={errors.name} 
+                  style={styles.errorText} 
+                />
+              )}
             </View>
 
             <View style={styles.inputsContainer}>
-              <TextComp text="Event Category" style={styles.inputLabel} />
+              <TextComp text="EVENT_CATEGORY" style={styles.inputLabel} />
               <CustomPicker
                 value={formData.category}
                 onValueChange={(value) => setFormData({ ...formData, category: value as string })}
@@ -151,10 +257,12 @@ const UpdateEventScreen = () => {
             <View style={styles.inputsContainer}>
               <TextComp text="EVENT_DATE" style={styles.inputLabel} />
               <TouchableOpacity
-                style={[
-                  styles.inputContainer,
-                  { flexDirection: "row", alignItems: "center", gap: moderateScale(10) },
-                ]}
+                style={{
+                  ...styles.inputContainer,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: moderateScale(10)
+                }}
                 onPress={() => setShowDatePicker(true)}
               >
                 <CalendarIcon
@@ -173,6 +281,7 @@ const UpdateEventScreen = () => {
                     setShowDatePicker(false);
                     if (date) setFormData({ ...formData, date });
                   }}
+                  minimumDate={new Date()}
                 />
               )}
             </View>
@@ -181,10 +290,13 @@ const UpdateEventScreen = () => {
               <View style={[styles.inputsContainer, { flex: 1, marginRight: moderateScale(8) }]}>
                 <TextComp text="START_TIME" style={styles.inputLabel} />
                 <TouchableOpacity
-                  style={[
-                    styles.inputContainer,
-                    { flexDirection: "row", alignItems: "center", gap: moderateScale(10) },
-                  ]}
+                  style={{
+                    ...styles.inputContainer,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: moderateScale(10),
+                    ...(errors.time ? styles.inputError : {})
+                  }}
                   onPress={() => setShowStartTimePicker(true)}
                 >
                   <ClockIcon
@@ -201,7 +313,12 @@ const UpdateEventScreen = () => {
                     style={{ backgroundColor: colors.background }}
                     onChange={(event, time) => {
                       setShowStartTimePicker(false);
-                      if (time) setFormData({ ...formData, startTime: time });
+                      if (time) {
+                        setFormData({ ...formData, startTime: time });
+                        if (errors.time) {
+                          setErrors({ ...errors, time: undefined });
+                        }
+                      }
                     }}
                   />
                 )}
@@ -210,10 +327,13 @@ const UpdateEventScreen = () => {
               <View style={[styles.inputsContainer, { flex: 1, marginLeft: moderateScale(8) }]}>
                 <TextComp text="END_TIME" style={styles.inputLabel} />
                 <TouchableOpacity
-                  style={[
-                    styles.inputContainer,
-                    { flexDirection: "row", alignItems: "center", gap: moderateScale(10) },
-                  ]}
+                  style={{
+                    ...styles.inputContainer,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: moderateScale(10),
+                    ...(errors.time ? styles.inputError : {})
+                  }}
                   onPress={() => setShowEndTimePicker(true)}
                 >
                   <ClockIcon
@@ -230,41 +350,83 @@ const UpdateEventScreen = () => {
                     style={{ backgroundColor: colors.background }}
                     onChange={(event, time) => {
                       setShowEndTimePicker(false);
-                      if (time) setFormData({ ...formData, endTime: time });
+                      if (time) {
+                        setFormData({ ...formData, endTime: time });
+                        if (errors.time) {
+                          setErrors({ ...errors, time: undefined });
+                        }
+                      }
                     }}
                   />
                 )}
               </View>
             </View>
+            
+            {errors.time && (
+              <TextComp 
+                text={errors.time} 
+                style={{ ...styles.errorText, marginTop: -verticalScale(12), marginBottom: verticalScale(12) }} 
+              />
+            )}
 
             <View style={styles.inputsContainer}>
               <TextComp text="DESCRIPTION" style={styles.inputLabel} />
               <TextInputComp
                 placeholder="ENTER_EVENT_DESCRIPTION"
                 value={formData.description}
-                onChangeText={(text) => setFormData({ ...formData, description: text })}
+                onChangeText={(text) => {
+                  setFormData({ ...formData, description: text });
+                  if (errors.description) {
+                    setErrors({ ...errors, description: undefined });
+                  }
+                }}
                 multiline
                 numberOfLines={8}
                 style={[styles.input, styles.descriptionInput]}
-                containerStyle={{ ...styles.inputContainer, ...styles.descriptionContainer }}
+                containerStyle={
+                  errors.description
+                    ? { ...styles.inputContainer, ...styles.descriptionContainer, ...styles.inputError }
+                    : { ...styles.inputContainer, ...styles.descriptionContainer }
+                }
                 placeholderTextColor={commonColors.gray200}
                 textAlignVertical="top"
               />
+              {errors.description && (
+                <TextComp 
+                  text={errors.description} 
+                  style={styles.errorText} 
+                />
+              )}
             </View>
 
             <View style={styles.inputsContainer}>
               <TextComp text="LOCATION" style={styles.inputLabel} />
               <CustomPicker
                 value={formData.location}
-                onValueChange={(value) => setFormData({ ...formData, location: value as string })}
+                onValueChange={(value) => {
+                  setFormData({ ...formData, location: value as string });
+                  if (errors.location) {
+                    setErrors({ ...errors, location: undefined });
+                  }
+                }}
                 items={greenSpaces?.map(space => ({
                   label: space.name,
                   value: space._id
                 })) || []}
                 placeholder="Select Location"
-                containerStyle={styles.inputContainer}
+                containerStyle={
+                  errors.location
+                    ? { ...styles.inputContainer, ...styles.inputError }
+                    : styles.inputContainer
+                }
                 disabled={!greenSpaces?.length}
               />
+              {errors.location && (
+                <TextComp 
+                  text={errors.location} 
+                  style={styles.errorText} 
+                />
+              )}
             </View>
 
             <ButtonComp

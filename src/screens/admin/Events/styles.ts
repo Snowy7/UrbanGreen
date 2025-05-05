@@ -156,6 +156,15 @@ const useRTLStyles = (isRTL: boolean, theme: "light" | "dark") => {
       height: verticalScale(500),
       backgroundColor: "red",
     },
+    // Form validation styles
+    inputError: {
+      borderColor: commonColors.error,
+    },
+    errorText: {
+      color: commonColors.error,
+      fontSize: moderateScale(12),
+      marginTop: verticalScale(4),
+    },
   });
 };
 

@@ -67,6 +67,31 @@ export const joinEvent = mutation({
   },
 });
 
+// Mutation to update an event
+export const update = mutation({
+  args: {
+    id: v.id("events"),
+    name: v.optional(v.string()),
+    category: v.optional(v.string()),
+    date: v.optional(v.string()),
+    startTime: v.optional(v.string()),
+    endTime: v.optional(v.string()),
+    description: v.optional(v.string()),
+    location: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...updates } = args;
+    const event = await ctx.db.get(id);
+    
+    if (!event) {
+      throw new Error("Event not found");
+    }
+    
+    await ctx.db.patch(id, updates);
+    return id;
+  },
+});
+
 export const getJoinedEvents = query({
   args: {
     userId: v.string(),
