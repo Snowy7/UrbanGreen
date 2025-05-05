@@ -101,7 +101,8 @@ const EventsScreen = () => {
             contentContainerStyle={styles.listContainer}
             ListEmptyComponent={renderEmptyList}
             refreshing={loading}
-            onRefresh={() => setLoading(true)}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={<View style={styles.listFooter} />}
           />
         </View>
       </View>

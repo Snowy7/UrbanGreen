@@ -14,7 +14,7 @@ export const getAll = query({
         const imageUrl = await ctx.storage.getUrl(image);
         images.push(imageUrl);
       }
-      greenSpacesWithImages.push({ ...greenSpace, images });
+      greenSpacesWithImages.push({ ...greenSpace, images, imageIds: greenSpace.images });
     }
     return greenSpacesWithImages;
   },

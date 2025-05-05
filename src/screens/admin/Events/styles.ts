@@ -52,12 +52,18 @@ const useRTLStyles = (isRTL: boolean, theme: "light" | "dark") => {
       borderTopLeftRadius: moderateScale(20),
       borderTopRightRadius: moderateScale(20),
       marginTop: -moderateScale(20),
-      padding: moderateScale(20),
+      paddingHorizontal: moderateScale(20),
+      paddingTop: moderateScale(20),
+      paddingBottom: 0,
     },
     
     listContainer: {
-      flex: 1,
+      paddingBottom: verticalScale(100),
       backgroundColor: colors.background,
+    },
+
+    listFooter: {
+      height: verticalScale(50),
     },
 
     emptyContainer: {
@@ -145,6 +151,10 @@ const useRTLStyles = (isRTL: boolean, theme: "light" | "dark") => {
       fontSize: moderateScale(16),
       fontWeight: "medium",
       color: commonColors.white,
+    },
+    fillerView: {
+      height: verticalScale(500),
+      backgroundColor: "red",
     },
   });
 };
