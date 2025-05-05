@@ -77,6 +77,19 @@ const PendingRequests = () => {
     </View>
   );
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "#FFA500";
+      case "approved":
+        return "#4CAF50";
+      case "rejected":
+        return "#F44336";
+      default:
+        return "#999999";
+    }
+  };
+
   const renderRequestItem = ({ item }: { item: ContentRequest }) => {
     const isEvent = item.type === 'Add Event';
     const isGreenSpace = item.type === 'Add Green Space' || item.type === 'Update Green Space';
@@ -88,7 +101,7 @@ const PendingRequests = () => {
       >
         <View style={styles.requestHeader}>
           <TextComp text={item.type} style={[styles.requestTitle, { color: colors.text }]} />
-          <View style={[styles.typeBadge, { backgroundColor: commonColors.primary }]}>
+          <View style={[styles.typeBadge, { backgroundColor: getStatusColor(item.status) }]}>
             <TextComp text={item.status} style={styles.typeText} />
           </View>
         </View>

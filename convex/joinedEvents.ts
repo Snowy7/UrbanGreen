@@ -9,7 +9,7 @@ export const getByUserId = query({
   },
   handler: async (ctx, args) => {
     const joinedEvents = await ctx.db
-      .query("joinedEvents")
+      .query("eventRegistrations")
       .filter((q) => q.eq(q.field("userId"), args.userId))
       .collect();
 
@@ -34,7 +34,7 @@ export const join = mutation({
 
     // Check if already joined
     const existing = await ctx.db
-      .query("joinedEvents")
+      .query("eventRegistrations")
       .filter((q) => 
         q.and(
           q.eq(q.field("userId"), user._id),
@@ -47,10 +47,10 @@ export const join = mutation({
       return existing._id;
     }
 
-    const joinedEventId = await ctx.db.insert("joinedEvents", {
+    const joinedEventId = await ctx.db.insert("eventRegistrations", {
       userId: user._id,
       eventId: args.eventId,
-      joinedAt: new Date().toISOString(),
+      registeredAt: new Date().toISOString(),
     });
 
     return joinedEventId;
@@ -65,7 +65,7 @@ export const leave = mutation({
     const user = await getCurrentUserOrThrow(ctx);
 
     const joinedEvent = await ctx.db
-      .query("joinedEvents")
+      .query("eventRegistrations")
       .filter((q) => 
         q.and(
           q.eq(q.field("userId"), user._id),

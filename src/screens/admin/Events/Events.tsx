@@ -16,9 +16,9 @@ import useRTLStyles from "./styles";
 import useIsRTL from "@/hooks/useIsRTL";
 import { BackArrowIcon } from "@/assets/icons";
 import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "convex/_generated/api";
-
+import { Id } from "convex/_generated/dataModel";
 type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "Events">;
 
 const EventsScreen = () => {
@@ -33,6 +33,7 @@ const EventsScreen = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const events = useQuery(api.events.getAll);
+  const deleteEvent = useMutation(api.events.deleteEvent);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -52,8 +53,7 @@ const EventsScreen = () => {
 
     try {
       setDeleteLoading(true);
-      // TODO: Implement event deletion
-      console.log("Deleting event:", selectedEventId);
+      await deleteEvent({ id: selectedEventId as Id<"events"> });
       setDeleteModalVisible(false);
       setSelectedEventId(null);
     } catch (error) {

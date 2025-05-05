@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Alert } from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Alert, RefreshControl } from "react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { Colors, commonColors } from "@/styles/colors";
 import TextComp from "@/components/TextComp";
@@ -44,26 +44,49 @@ const EventDetails = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute();
   const { id } = route.params as { id: string };
-  const { userId } = useAuth();
   const { userProfile } = useUserProfile();
-  const [isJoining, setIsJoining] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const event = useQuery(api.events.getById, { id: id as Id<"events"> });
   const greenSpace = useQuery(api.greenspaces.getById, {
     id: event?.location as Id<"greenSpaces">,
   });
+  
+  // Check if the user has already joined this event
+  const userJoinedEvents = useQuery(
+    api.events.getJoinedEvents, 
+    userProfile ? { userId: userProfile._id } : null
+  );
+  
+  const isJoined = userJoinedEvents?.some(
+    joinedEvent => joinedEvent._id === id
+  );
+  
   const joinEventMutation = useMutation(api.events.joinEvent);
+  const leaveEventMutation = useMutation(api.joinedEvents.leave);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // The queries will automatically refresh
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   const handleJoinEvent = async () => {
-    if (!userId) {
+    if (!userProfile) {
       Alert.alert("Error", "Please sign in to join events");
       return;
     }
 
     try {
-      setIsJoining(true);
-      const result = await joinEventMutation({ eventId: id as Id<"events">, userId });
+      setIsLoading(true);
+      const result = await joinEventMutation({ eventId: id as Id<"events">, userId: userProfile._id });
+      
       if (result.success) {
+        // Refresh data after successful join
+        onRefresh();
         Alert.alert("Success", result.message);
       } else {
         Alert.alert("Already Registered", result.message);
@@ -71,8 +94,39 @@ const EventDetails = () => {
     } catch (error) {
       Alert.alert("Error", "Failed to join event. Please try again later.");
     } finally {
-      setIsJoining(false);
+      setIsLoading(false);
     }
+  };
+  
+  const handleLeaveEvent = async () => {
+    if (!userProfile) {
+      return;
+    }
+    
+    try {
+      setIsLoading(true);
+      await leaveEventMutation({ eventId: id as Id<"events"> });
+      
+      // Refresh data after successful leave
+      onRefresh();
+      Alert.alert("Success", "You have left this event");
+    } catch (error) {
+      console.error("Error leaving event:", error);
+      Alert.alert("Error", "Failed to leave the event. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const confirmLeaveEvent = () => {
+    Alert.alert(
+      "Leave Event",
+      "Are you sure you want to leave this event?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Leave", onPress: handleLeaveEvent, style: "destructive" }
+      ]
+    );
   };
 
   if (!event || !greenSpace) {
@@ -81,7 +135,17 @@ const EventDetails = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh}
+            colors={[commonColors.primary]}
+            tintColor={commonColors.primary}
+          />
+        }
+      >
         <View style={styles.heroSection}>
           <LinearGradient
             colors={["#8CC63F", "#46983C", "#006837"]}
@@ -147,12 +211,31 @@ const EventDetails = () => {
             />
           </View>
 
-          {!userProfile?.isAdmin && (
-            <ButtonComp
-              title="Join Event"
-              onPress={handleJoinEvent}
-              style={styles.joinButton}
-              isLoading={isJoining}
+          {!userProfile?.isAdmin && userProfile && (
+            <>
+              {isJoined ? (
+                <ButtonComp
+                  title="Leave Event"
+                  onPress={confirmLeaveEvent}
+                  style={styles.leaveButton}
+                  isLoading={isLoading}
+                  variant="secondary"
+                />
+              ) : (
+                <ButtonComp
+                  title="Join Event"
+                  onPress={handleJoinEvent}
+                  style={styles.joinButton}
+                  isLoading={isLoading}
+                />
+              )}
+            </>
+          )}
+          
+          {!userProfile && (
+            <TextComp 
+              text="Sign in to join this event" 
+              style={styles.signInMessage} 
             />
           )}
         </View>
@@ -215,6 +298,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: moderateScale(20),
     marginTop: -moderateScale(20),
     padding: moderateScale(20),
+    paddingBottom: verticalScale(40),
   },
   infoSection: {
     gap: verticalScale(15),
@@ -247,6 +331,17 @@ const styles = StyleSheet.create({
   },
   joinButton: {
     marginTop: verticalScale(20),
+  },
+  leaveButton: {
+    marginTop: verticalScale(20),
+    backgroundColor: commonColors.error,
+    borderColor: commonColors.error,
+  },
+  signInMessage: {
+    textAlign: 'center',
+    marginTop: verticalScale(20),
+    color: commonColors.gray400,
+    fontSize: moderateScale(14),
   },
 });
 

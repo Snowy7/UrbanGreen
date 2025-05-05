@@ -92,6 +92,17 @@ export const update = mutation({
   },
 });
 
+export const deleteEvent = mutation({
+  args: {
+    id: v.id("events"),
+  },
+  handler: async (ctx, args) => {
+    const { id } = args;
+    await ctx.db.delete(id);
+    return id;
+  },
+});
+
 export const getJoinedEvents = query({
   args: {
     userId: v.string(),
