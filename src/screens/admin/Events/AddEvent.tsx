@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AdminStackParamList } from "@/navigation/types";
@@ -53,6 +53,12 @@ const AddEventScreen = () => {
   const createEvent = useMutation(api.events.create);
 
   const handleSubmit = async () => {
+
+    if (!formData.name || !formData.category || !formData.date || !formData.startTime || !formData.endTime || !formData.description || !formData.location) {
+      Alert.alert("Please fill in all fields");
+      return;
+    }
+
     try {
       setLoading(true);
       await createEvent({

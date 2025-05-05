@@ -461,10 +461,10 @@ const UpdateGreenSpaceForm = () => {
                     : colors.buttonSecondary,
                 }))}
                 placeholder="SELECT_WORKING_DAYS"
-                containerStyle={[styles.inputContainer, styles.inputError]}
+                containerStyle={[styles.inputContainer]}
                 multiple
               />
-              <View style={styles.selectedDaysContainer}>
+{/*               <View style={styles.selectedDaysContainer}>
                 {formData.workingDays.map((day) => (
                   <View key={day} style={styles.selectedDayTag}>
                     <TextComp text={t(day)} style={styles.selectedDayText} />
@@ -481,7 +481,7 @@ const UpdateGreenSpaceForm = () => {
                     </TouchableOpacity>
                   </View>
                 ))}
-              </View>
+              </View> */}
             </View>
 
             <View style={styles.inputsContainer}>
