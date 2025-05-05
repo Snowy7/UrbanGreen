@@ -52,7 +52,10 @@ const SubmitContentRequest = () => {
             style={styles.heroGradient}
           />
           <View style={styles.heroImageContainer}>
-            <Image source={require("@/assets/images/ContentRequest.png")} style={styles.heroImage} />
+            <Image
+              source={require("@/assets/images/ContentRequest.png")}
+              style={styles.heroImage}
+            />
           </View>
           <View style={styles.heroTextContainer}>
             <TextComp text="Submit Content Request" style={styles.heroText} />
@@ -72,10 +75,10 @@ const SubmitContentRequest = () => {
                 onValueChange={(value) => setSelectedType(value as string)}
                 items={[
                   { label: "Select a request type", value: "" },
-                  ...REQUEST_TYPES.map(type => ({ label: type, value: type }))
+                  ...REQUEST_TYPES.map((type) => ({ label: type, value: type })),
                 ]}
                 placeholder="SELECT_REQUEST_TYPE"
-                containerStyle={styles.picker}
+                containerStyle={[styles.picker]}
               />
             </View>
           </View>
@@ -182,8 +185,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   picker: {
-    height: verticalScale(50),
-    color: commonColors.secondary,
+    backgroundColor: commonColors.white,
+    borderRadius: moderateScale(8),
+    padding: moderateScale(12),
+    borderWidth: 1,
+    borderColor: commonColors.gray200,
   },
   continueButton: {
     marginTop: verticalScale(20),
