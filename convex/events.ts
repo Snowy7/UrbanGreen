@@ -49,9 +49,7 @@ export const joinEvent = mutation({
     // Check if user is already registered using the compound index
     const existingRegistration = await ctx.db
       .query("eventRegistrations")
-      .withIndex("by_event_and_user", (q) => 
-        q.eq("eventId", eventId).eq("userId", userId)
-      )
+      .withIndex("by_event_and_user", (q) => q.eq("eventId", eventId).eq("userId", userId))
       .first();
 
     if (existingRegistration) {
@@ -95,4 +93,4 @@ export const getJoinedEvents = query({
 
     return events;
   },
-}); 
+});

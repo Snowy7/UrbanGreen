@@ -16,6 +16,8 @@ import useRTLStyles from "./AddEvent/styles";
 import useIsRTL from "@/hooks/useIsRTL";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useGreenSpaces } from "@/hooks/useGreenSpaces";
+import { useMutation } from "convex/react";
+import { api } from "convex/_generated/api";
 
 type NavigationProp = NativeStackNavigationProp<AdminStackParamList, "AddEvent">;
 
@@ -48,11 +50,20 @@ const AddEventScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const createEvent = useMutation(api.events.create);
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      // TODO: Implement event creation
+      await createEvent({
+        name: formData.name,
+        category: formData.category,
+        date: formData.date.toISOString(),
+        startTime: formData.startTime.toISOString(),
+        endTime: formData.endTime.toISOString(),
+        description: formData.description,
+        location: formData.location,
+      });
       navigation.goBack();
     } catch (error) {
       console.error("Error creating event:", error);
