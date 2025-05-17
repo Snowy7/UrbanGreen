@@ -30,10 +30,6 @@ export const Routes = () => {
     );
   }
 
-  console.log(userProfile);
-  console.log(isSignedIn);
-  console.log(isLoading);
-
   return (
     <NavigationContainer>
       <StatusBar barStyle={colors.statusBar} backgroundColor="transparent" translucent />

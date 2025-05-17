@@ -1,6 +1,6 @@
 export default {
-    regular: 'Inter-Regular',
-    bold: 'Inter-Bold',
-    medium: 'Inter-Medium',
-    semiBold: 'Inter-SemiBold',
+    regular: 'Almarai_300Light',
+    bold: 'Almarai_800ExtraBold',
+    medium: 'Almarai_400Regular',
+    semiBold: 'Almarai_700Bold',
 };  

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@clerk/clerk-expo": "^2.10.1",
+    "@expo-google-fonts/almarai": "^0.3.0",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-picker/picker": "^2.9.0",
     "@react-navigation/bottom-tabs": "^7.3.4",

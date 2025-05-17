@@ -14,6 +14,8 @@ import { MainStackParamList } from '@/navigation/types';
 import { useAuth } from '@clerk/clerk-expo';
 import { CalendarIcon, ClockIcon, LocationIcon } from '@/assets/icons';
 import LoadingComp from '@/components/LoadingComp';
+import { Id } from '../../../../convex/_generated/dataModel';
+import { useUserProfile } from '@/hooks/useUserProfile';
 
 type NavigationProp = NativeStackNavigationProp<MainStackParamList, 'JoinedEvents'>;
 
@@ -41,10 +43,10 @@ const JoinedEvents = () => {
   const { theme } = useTheme();
   const colors = Colors[theme];
   const navigation = useNavigation<NavigationProp>();
-  const { userId } = useAuth();
+  const { userProfile } = useUserProfile();
 
   const joinedEvents = useQuery(api.events.getJoinedEvents, {
-    userId: userId || "",
+    userId: userProfile._id || "",
   });
 
   if (!joinedEvents) {

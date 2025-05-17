@@ -7,7 +7,6 @@ export { default as OTPVerification } from './auth/OTPVerification/OTPVerificati
 //home screens
 export { default as Home } from '@/screens/main/Home/Home';
 export { default as Profile } from '@/screens/main/Profile/Profile';
-export { default as Settings } from '@/screens/main/Settings/Settings';
 export { default as SubmitContentRequest } from '@/screens/main/Profile/SubmitContentRequest/SubmitContentRequest';
 export { default as ContentRequests } from '@/screens/main/Profile/ContentRequests/ContentRequests';
 export { default as EditAccount } from '@/screens/main/Profile/EditAccount';
