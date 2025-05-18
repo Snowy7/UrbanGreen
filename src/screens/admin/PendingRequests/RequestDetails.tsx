@@ -61,7 +61,7 @@ const RequestDetails = () => {
           description: request.greenSpaceDescription || '',
           location: request.greenSpaceLocation || '',
           facilities: request.facilities || '',
-          images: request.imageIds || [],
+          images: request.imagesIds || [],
         });
       } else if (request.type === 'Update Green Space') {
         if (!request._id) return;
@@ -75,7 +75,7 @@ const RequestDetails = () => {
           description: request.greenSpaceDescription,
           location: request.greenSpaceLocation,
           facilities: request.facilities,
-          images: request.imageIds,
+          images: request.imagesIds,
         });
       }
 

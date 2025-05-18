@@ -129,7 +129,7 @@ const GreenSpaceDetails = () => {
       case "photos":
         return (
           <View style={styles.tabContent}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.gallery}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.gallery}>
               {greenSpace.images.map((image, index) => (
                 <Image key={index} source={{ uri: image }} style={styles.galleryImage} />
               ))}
@@ -409,6 +409,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH - moderateScale(40),
     height: verticalScale(150),
     borderRadius: moderateScale(10),
+    marginBottom: verticalScale(10),
   },
   detailsSection: {
     marginBottom: verticalScale(20),
