@@ -12,11 +12,11 @@
  * - SplashScreen management
  */
 
-import { useFonts } from "@expo-google-fonts/almarai/useFonts";
-import { Almarai_300Light } from "@expo-google-fonts/almarai/300Light";
-import { Almarai_400Regular } from "@expo-google-fonts/almarai/400Regular";
-import { Almarai_700Bold } from "@expo-google-fonts/almarai/700Bold";
-import { Almarai_800ExtraBold } from "@expo-google-fonts/almarai/800ExtraBold";
+import { useFonts } from '@expo-google-fonts/almarai/useFonts';
+import { Almarai_300Light } from '@expo-google-fonts/almarai/300Light';
+import { Almarai_400Regular } from '@expo-google-fonts/almarai/400Regular';
+import { Almarai_700Bold } from '@expo-google-fonts/almarai/700Bold';
+import { Almarai_800ExtraBold } from '@expo-google-fonts/almarai/800ExtraBold';
 
 import "@/lang";
 import Routes from "@/navigation/Routes";
@@ -53,10 +53,10 @@ const App = () => {
    * Load custom fonts using Expo's useFonts hook
    */
   const [loaded, error] = useFonts({
-    Almarai_300Light,
-    Almarai_400Regular,
-    Almarai_700Bold,
-    Almarai_800ExtraBold,
+    "Inter-Regular": require("./src/assets/fonts/CodecPro-Regular.ttf"),
+    "Inter-Bold": require("./src/assets/fonts/CodecPro-Bold.ttf"),
+    "Inter-Medium": require("./src/assets/fonts/CodecPro-Heavy.ttf"),
+    "Inter-SemiBold": require("./src/assets/fonts/CodecPro-Fat.ttf"),
   });
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const App = () => {
       {!isAppReady && (
         <Animated.View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
